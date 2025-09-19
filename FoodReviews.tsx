@@ -5,7 +5,7 @@ import { Button } from './button';
 import { Input } from './input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './select';
 import { Badge } from './badge';
-import { ImageWithFallback } from './figma/ImageWithFallback';
+import { ImageWithFallback } from './ImageWithFallback';
 import PageHeader from './PageHeader';
 import { foodReviews } from '../data/food-reviews';
 
