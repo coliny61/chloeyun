@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import Navigation from "./Navigation";
 import Hero from "./Hero";
-import About from './components/About';
-import Portfolio from './components/Portfolio';
-import FoodReviews from './components/FoodReviews';
-import Events from './components/Events';
-import Lifestyle from './components/Lifestyle';
-import MediaKit from './components/MediaKit';
-import Contact from './components/Contact';
-import Footer from './components/Footer';
+import About from './About';
+import Portfolio from './Portfolio';
+import FoodReviews from './FoodReviews';
+import Events from './Events';
+import Lifestyle from './Lifestyle';
+import MediaKit from './MediaKit';
+import Contact from './Contact';
+import Footer from './Footer';
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState('home');
