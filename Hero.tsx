@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { ChevronDown, Play, Instagram, ArrowRight, MessageCircle, Heart, Share, Bookmark, Coffee, MapPin, ExternalLink, Clock, User } from 'lucide-react';
-import { ImageWithFallback } from './figma/ImageWithFallback';
+import { ImageWithFallback } from './ImageWithFallback';
 import { Button } from './button';
 import { featuredVideos } from '../data/videos';
 import { brandPartnerships } from '../data/brand-partnerships';
