@@ -1,10 +1,10 @@
 import React, { useState, useMemo } from 'react';
 import { motion } from 'motion/react';
 import { Star, MapPin, Clock, ExternalLink, Search, Utensils, Coffee, Cake, Hash, DollarSign, Filter, SlidersHorizontal, X } from 'lucide-react';
-import { Button } from './ui/button';
-import { Input } from './ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
-import { Badge } from './ui/badge';
+import { Button } from './button';
+import { Input } from './input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './select';
+import { Badge } from './badge';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 import PageHeader from './PageHeader';
 import { foodReviews } from '../data/food-reviews';
