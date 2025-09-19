@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { Calendar, MapPin, Users, Clock, Camera, ExternalLink } from 'lucide-react';
 import { Button } from './button';
-import { ImageWithFallback } from './ImageWithFallback';
+import ImageWithFallback from './ImageWithFallback';
 import PageHeader from './PageHeader';
 
 export default function Events() {
