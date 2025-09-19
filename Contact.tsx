@@ -4,7 +4,7 @@ import { Send, Instagram, Play, Mail, MapPin, ExternalLink, Clock } from 'lucide
 import { Button } from './button';
 import { Input } from './input';
 import { Textarea } from './textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './select';
+//import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './select';
 import PageHeader from './PageHeader';
 
 export default function Contact() {
