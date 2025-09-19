@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { Heart, MapPin, Calendar, Coffee, Utensils, Camera, Play } from 'lucide-react';
 import { Button } from './button';
-import { ImageWithFallback } from './figma/ImageWithFallback';
+import { ImageWithFallback } from './ImageWithFallback';
 import PageHeader from './PageHeader';
 
 export default function Lifestyle() {
