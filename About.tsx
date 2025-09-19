@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { ImageWithFallback } from './figma/ImageWithFallback';
+import ImageWithFallback from './ImageWithFallback';
 import PageHeader from './PageHeader';
 
 export default function About() {
