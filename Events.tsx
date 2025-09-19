@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { Calendar, MapPin, Users, Clock, Camera, ExternalLink } from 'lucide-react';
-import { Button } from './ui/button';
+import { Button } from './button';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 import PageHeader from './PageHeader';
 
