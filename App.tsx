@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import Navigation from './components/Navigation';
+import Navigation from "./Navigation";
 import Hero from './components/Hero';
 import About from './components/About';
 import Portfolio from './components/Portfolio';
