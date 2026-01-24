@@ -1,0 +1,93 @@
+@import "tailwindcss";
+
+@theme {
+  /* Brand Colors */
+  --color-coral: #FF6B6B;
+  --color-peach: #FFEAA7;
+  --color-cream: #FFF9E6;
+  --color-terracotta: #E07A5F;
+  --color-warm-gray: #6B5B5B;
+  --color-off-white: #FFFBF5;
+
+  /* Font Families */
+  --font-heading: 'Playfair Display', serif;
+  --font-body: 'Inter', sans-serif;
+}
+
+/* Base styles */
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-off-white);
+  color: var(--color-warm-gray);
+  margin: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  color: var(--color-warm-gray);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-cream);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-coral);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-terracotta);
+}
+
+/* Smooth scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Animation utilities */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.5s ease-out forwards;
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.6s ease-out forwards;
+}
+
+/* TikTok embed responsive */
+.tiktok-embed {
+  max-width: 100%;
+}
+
+/* Instagram embed responsive */
+.instagram-media {
+  max-width: 100% !important;
+  min-width: 280px !important;
+}
