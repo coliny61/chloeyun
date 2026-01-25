@@ -21,6 +21,7 @@ export interface Place {
   website?: string;
   createdAt?: string;
   location?: LocationTag;
+  dateReviewed?: string; // Date the place was reviewed (for sorting by most recent)
 }
 
 export interface Video {
@@ -52,25 +53,6 @@ export interface TravelPost {
   instagramUrl?: string;
   date: string;
   thumbnail?: string;
-}
-
-export interface CoffeeShop {
-  id: string;
-  name: string;
-  address: string;
-  latitude: number;
-  longitude: number;
-  description?: string;
-  tikTokUrl?: string;
-  instagramUrl?: string;
-  rating: number;
-  priceRange: PriceRange;
-  coverImage: string;
-  featured?: boolean;
-  hours?: string;
-  phone?: string;
-  website?: string;
-  location?: LocationTag;
 }
 
 export interface VlogPost {

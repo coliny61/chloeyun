@@ -5,7 +5,6 @@ import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 const navLinks = [
   { name: 'Home', path: '/' },
   { name: 'Food', path: '/map' },
-  { name: 'Coffee', path: '/coffee' },
   { name: 'Events', path: '/events' },
   { name: 'Vlog', path: '/vlog' },
   { name: 'About', path: '/about' },

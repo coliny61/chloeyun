@@ -1,4 +1,4 @@
-import type { Place, SocialStats, Video, Event, TravelPost, CoffeeShop, VlogPost } from '../types';
+import type { Place, SocialStats, Video, Event, TravelPost, VlogPost } from '../types';
 
 export const mockPlaces: Place[] = [
   {
@@ -19,6 +19,7 @@ export const mockPlaces: Place[] = [
     hours: 'Mon-Thu: 11AM-11PM, Fri-Sat: 11AM-12AM, Sun: 11AM-10PM',
     phone: '(972) 323-9306',
     website: 'https://instagram.com/donsarang.kbbq',
+    dateReviewed: '2024-06-15',
   },
   {
     id: '12',
@@ -38,6 +39,7 @@ export const mockPlaces: Place[] = [
     hours: 'Tue-Thu: 5PM-9:30PM, Fri-Sat: 5PM-10PM',
     phone: '(469) 455-1435',
     website: 'https://mamanirestaurant.com',
+    dateReviewed: '2024-06-20',
   },
   {
     id: '13',
@@ -56,6 +58,7 @@ export const mockPlaces: Place[] = [
     location: 'DFW',
     hours: 'Daily: 4PM-10PM (11PM weekends)',
     website: 'https://normansjapanese.com',
+    dateReviewed: '2024-06-25',
   },
   {
     id: '14',
@@ -74,6 +77,7 @@ export const mockPlaces: Place[] = [
     location: 'DFW',
     hours: 'Mon-Sat: 11AM-3PM, 4PM-8PM',
     website: 'https://nekoyubu.com',
+    dateReviewed: '2024-07-01',
   },
   {
     id: '15',
@@ -92,6 +96,7 @@ export const mockPlaces: Place[] = [
     location: 'DFW',
     hours: 'Daily: 11:30AM-12AM',
     website: 'https://nadcburger.com',
+    dateReviewed: '2024-07-10',
   },
   {
     id: '16',
@@ -111,6 +116,7 @@ export const mockPlaces: Place[] = [
     hours: 'Tue-Sat: 5PM-10PM',
     phone: '(214) 948-4998',
     website: 'https://luciadallas.com',
+    dateReviewed: '2024-07-15',
   },
   {
     id: '17',
@@ -130,6 +136,7 @@ export const mockPlaces: Place[] = [
     hours: 'Daily: 12PM-11PM',
     phone: '(214) 407-8033',
     website: 'https://bigdash.com',
+    dateReviewed: '2024-07-20',
   },
   {
     id: '18',
@@ -148,6 +155,7 @@ export const mockPlaces: Place[] = [
     location: 'DFW',
     hours: 'Tue-Sat: 5:30PM & 7:45PM seatings',
     website: 'https://tatsu-dallas.com',
+    dateReviewed: '2024-07-25',
   },
   {
     id: '19',
@@ -167,6 +175,7 @@ export const mockPlaces: Place[] = [
     hours: 'Tue-Thu: 5PM-10PM, Fri-Sat: 5PM-11PM, Sun: 5PM-9PM',
     phone: '(972) 803-3274',
     website: 'https://pillardallas.com',
+    dateReviewed: '2024-08-01',
   },
   {
     id: '20',
@@ -186,6 +195,7 @@ export const mockPlaces: Place[] = [
     hours: 'Mon: 3PM-9PM, Tue-Thu: 11:30AM-9PM, Fri: 11:30AM-10PM, Sat: 3PM-10PM',
     phone: '(214) 605-3131',
     website: 'https://writtenbytheseasons.com',
+    dateReviewed: '2024-08-05',
   },
   {
     id: '21',
@@ -204,6 +214,7 @@ export const mockPlaces: Place[] = [
     location: 'DFW',
     hours: 'Daily: 11AM-9:30PM',
     phone: '(972) 242-2445',
+    dateReviewed: '2024-08-10',
   },
   {
     id: '22',
@@ -223,6 +234,7 @@ export const mockPlaces: Place[] = [
     hours: 'Daily: 7AM-7PM',
     phone: '(972) 589-3525',
     website: 'https://tradesdeli.com',
+    dateReviewed: '2024-08-15',
   },
   {
     id: '23',
@@ -242,6 +254,7 @@ export const mockPlaces: Place[] = [
     hours: 'Daily: 11AM-11PM, Fri-Sat: 11AM-12AM',
     phone: '(945) 201-7300',
     website: 'https://instagram.com/spiceshawarma',
+    dateReviewed: '2024-08-20',
   },
   {
     id: '24',
@@ -258,6 +271,7 @@ export const mockPlaces: Place[] = [
     featured: false,
     published: true,
     location: 'DFW',
+    dateReviewed: '2024-08-25',
   },
   {
     id: '25',
@@ -274,6 +288,7 @@ export const mockPlaces: Place[] = [
     featured: false,
     published: true,
     location: 'DFW',
+    dateReviewed: '2024-09-01',
   },
   {
     id: '26',
@@ -290,6 +305,7 @@ export const mockPlaces: Place[] = [
     featured: false,
     published: true,
     location: 'DFW',
+    dateReviewed: '2024-09-05',
   },
   {
     id: '27',
@@ -306,6 +322,7 @@ export const mockPlaces: Place[] = [
     featured: false,
     published: true,
     location: 'DFW',
+    dateReviewed: '2024-09-10',
   },
   {
     id: '28',
@@ -322,6 +339,7 @@ export const mockPlaces: Place[] = [
     featured: false,
     published: true,
     location: 'DFW',
+    dateReviewed: '2024-09-15',
   },
   {
     id: '29',
@@ -338,6 +356,7 @@ export const mockPlaces: Place[] = [
     featured: false,
     published: true,
     location: 'DFW',
+    dateReviewed: '2024-09-20',
   },
   {
     id: '30',
@@ -354,6 +373,7 @@ export const mockPlaces: Place[] = [
     featured: false,
     published: true,
     location: 'DFW',
+    dateReviewed: '2024-09-25',
   },
   {
     id: '31',
@@ -370,6 +390,7 @@ export const mockPlaces: Place[] = [
     featured: false,
     published: true,
     location: 'DFW',
+    dateReviewed: '2024-10-01',
   },
   {
     id: '32',
@@ -386,6 +407,7 @@ export const mockPlaces: Place[] = [
     featured: true,
     published: true,
     location: 'DFW',
+    dateReviewed: '2024-10-05',
   },
   {
     id: '33',
@@ -402,6 +424,7 @@ export const mockPlaces: Place[] = [
     featured: false,
     published: true,
     location: 'DFW',
+    dateReviewed: '2024-10-10',
   },
   {
     id: '34',
@@ -418,6 +441,7 @@ export const mockPlaces: Place[] = [
     featured: true,
     published: true,
     location: 'DFW',
+    dateReviewed: '2024-10-15',
   },
   {
     id: '35',
@@ -434,6 +458,7 @@ export const mockPlaces: Place[] = [
     featured: false,
     published: true,
     location: 'DFW',
+    dateReviewed: '2024-10-20',
   },
   {
     id: '36',
@@ -450,6 +475,7 @@ export const mockPlaces: Place[] = [
     featured: false,
     published: true,
     location: 'DFW',
+    dateReviewed: '2024-10-25',
   },
   {
     id: '37',
@@ -466,6 +492,7 @@ export const mockPlaces: Place[] = [
     featured: true,
     published: true,
     location: 'DFW',
+    dateReviewed: '2024-11-01',
   },
   {
     id: '38',
@@ -482,6 +509,7 @@ export const mockPlaces: Place[] = [
     featured: false,
     published: true,
     location: 'DFW',
+    dateReviewed: '2024-11-05',
   },
   {
     id: '39',
@@ -498,6 +526,110 @@ export const mockPlaces: Place[] = [
     featured: false,
     published: true,
     location: 'DFW',
+    dateReviewed: '2024-11-10',
+  },
+  // Coffee shops merged into food spots
+  {
+    id: '40',
+    name: 'Pax & Beneficia',
+    address: '2900 Canton St, Ste 130, Dallas, TX 75226',
+    latitude: 32.7873,
+    longitude: -96.7751,
+    cuisineType: 'Coffee',
+    priceRange: '$',
+    rating: 4.0,
+    coverImage: 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=800',
+    tikTokUrl: 'https://www.tiktok.com/t/ZP8fqH1Yn/',
+    reviewContent: 'Great coffee spot in Deep Ellum!',
+    featured: false,
+    published: true,
+    location: 'DFW',
+    dateReviewed: '2024-11-15',
+  },
+  {
+    id: '41',
+    name: 'Flying Horse Cafe',
+    address: '1401 Commerce St, Dallas, TX 75201',
+    latitude: 32.7822,
+    longitude: -96.8021,
+    cuisineType: 'Coffee',
+    priceRange: '$',
+    rating: 3.5,
+    coverImage: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800',
+    tikTokUrl: 'https://www.tiktok.com/t/ZP8fqB8oP/',
+    reviewContent: 'Small family owned business with the sweetest owner. Quick breakfast food on the go. Coffee can be hit or miss but was a staple when I worked in downtown Dallas.',
+    featured: false,
+    published: true,
+    location: 'DFW',
+    dateReviewed: '2024-11-20',
+  },
+  {
+    id: '42',
+    name: 'Khroma Coffee',
+    address: '3401 Main St, Ste B, Dallas, TX 75226',
+    latitude: 32.7863,
+    longitude: -96.7721,
+    cuisineType: 'Coffee',
+    priceRange: '$',
+    rating: 4.0,
+    coverImage: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=800',
+    tikTokUrl: 'https://www.tiktok.com/t/ZP8fqUvHJ/',
+    reviewContent: 'Cozy coffee shop with great vibes!',
+    featured: false,
+    published: true,
+    location: 'DFW',
+    dateReviewed: '2024-11-25',
+  },
+  {
+    id: '43',
+    name: 'La Souq',
+    address: '150 W Main St, Unit 900, Richardson, TX 75081',
+    latitude: 32.9483,
+    longitude: -96.7298,
+    cuisineType: 'Coffee',
+    priceRange: '$',
+    rating: 4.3,
+    coverImage: 'https://images.unsplash.com/photo-1442512595331-e89e73853f31?w=800',
+    tikTokUrl: 'https://www.tiktok.com/t/ZP8fqXaco/',
+    reviewContent: 'Unique coffee and tea experience!',
+    featured: false,
+    published: true,
+    location: 'DFW',
+    dateReviewed: '2024-12-01',
+  },
+  {
+    id: '44',
+    name: 'Chicha San Chen',
+    address: '2225 Old Denton Rd, Ste 135, Carrollton, TX 75006',
+    latitude: 32.9741,
+    longitude: -96.8952,
+    cuisineType: 'Coffee',
+    priceRange: '$',
+    rating: 4.9,
+    coverImage: 'https://images.unsplash.com/photo-1558857563-b371033873b8?w=800',
+    tikTokUrl: 'https://www.tiktok.com/t/ZP8fqu6pT/',
+    reviewContent: 'I especially love their mango tea with jelly boba!',
+    featured: false,
+    published: true,
+    location: 'DFW',
+    dateReviewed: '2024-12-05',
+  },
+  {
+    id: '45',
+    name: 'Hola Cafe',
+    address: '413 N Tyler St, Dallas, TX 75208',
+    latitude: 32.7524,
+    longitude: -96.8297,
+    cuisineType: 'Coffee',
+    priceRange: '$$',
+    rating: 4.2,
+    coverImage: 'https://images.unsplash.com/photo-1453614512568-c4024d13c247?w=800',
+    tikTokUrl: 'https://www.tiktok.com/t/ZP8fqhJo7/',
+    reviewContent: 'Lovely coffee spot in Bishop Arts!',
+    featured: false,
+    published: true,
+    location: 'DFW',
+    dateReviewed: '2024-12-10',
   },
 ];
 
@@ -598,83 +730,6 @@ export const mockTravelPosts: TravelPost[] = [
     description: 'Fall adventures in NYC!',
     tikTokUrl: 'https://www.tiktok.com/t/ZP8fqudo9/',
     date: '2025-10-01',
-  },
-];
-
-export const mockCoffeeShops: CoffeeShop[] = [
-  {
-    id: '1',
-    name: 'Pax & Beneficia',
-    address: '2900 Canton St, Ste 130, Dallas, TX 75226',
-    latitude: 32.7873,
-    longitude: -96.7751,
-    rating: 4.0,
-    priceRange: '$',
-    coverImage: 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=800',
-    tikTokUrl: 'https://www.tiktok.com/t/ZP8fqH1Yn/',
-    location: 'DFW',
-  },
-  {
-    id: '2',
-    name: 'Flying Horse Cafe',
-    address: '1401 Commerce St, Dallas, TX 75201',
-    latitude: 32.7822,
-    longitude: -96.8021,
-    rating: 3.5,
-    priceRange: '$',
-    coverImage: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800',
-    tikTokUrl: 'https://www.tiktok.com/t/ZP8fqB8oP/',
-    description: 'Small family owned business with the sweetest owner. Quick breakfast food on the go. Coffee can be hit or miss but was a staple when I worked in downtown Dallas.',
-    location: 'DFW',
-  },
-  {
-    id: '3',
-    name: 'Khroma Coffee',
-    address: '3401 Main St, Ste B, Dallas, TX 75226',
-    latitude: 32.7863,
-    longitude: -96.7721,
-    rating: 4.0,
-    priceRange: '$',
-    coverImage: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=800',
-    tikTokUrl: 'https://www.tiktok.com/t/ZP8fqUvHJ/',
-    location: 'DFW',
-  },
-  {
-    id: '4',
-    name: 'La Souq',
-    address: '150 W Main St, Unit 900, Richardson, TX 75081',
-    latitude: 32.9483,
-    longitude: -96.7298,
-    rating: 4.3,
-    priceRange: '$',
-    coverImage: 'https://images.unsplash.com/photo-1442512595331-e89e73853f31?w=800',
-    tikTokUrl: 'https://www.tiktok.com/t/ZP8fqXaco/',
-    location: 'DFW',
-  },
-  {
-    id: '5',
-    name: 'Chicha San Chen',
-    address: '2225 Old Denton Rd, Ste 135, Carrollton, TX 75006',
-    latitude: 32.9741,
-    longitude: -96.8952,
-    rating: 4.9,
-    priceRange: '$',
-    coverImage: 'https://images.unsplash.com/photo-1558857563-b371033873b8?w=800',
-    tikTokUrl: 'https://www.tiktok.com/t/ZP8fqu6pT/',
-    description: 'I especially love their mango tea with jelly boba!',
-    location: 'DFW',
-  },
-  {
-    id: '6',
-    name: 'Hola Cafe',
-    address: '413 N Tyler St, Dallas, TX 75208',
-    latitude: 32.7524,
-    longitude: -96.8297,
-    rating: 4.2,
-    priceRange: '$$',
-    coverImage: 'https://images.unsplash.com/photo-1453614512568-c4024d13c247?w=800',
-    tikTokUrl: 'https://www.tiktok.com/t/ZP8fqhJo7/',
-    location: 'DFW',
   },
 ];
 
@@ -812,10 +867,6 @@ export function getMockEvents(): Event[] {
 
 export function getMockTravelPosts(): TravelPost[] {
   return mockTravelPosts;
-}
-
-export function getMockCoffeeShops(): CoffeeShop[] {
-  return mockCoffeeShops;
 }
 
 export function getMockVlogPosts(): VlogPost[] {

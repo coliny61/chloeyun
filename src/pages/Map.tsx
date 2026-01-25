@@ -31,6 +31,15 @@ export default function Map() {
 
   const filteredPlaces = useFilteredPlaces(locationFilteredPlaces, filters);
 
+  // Sort by dateReviewed (oldest first, most recent last)
+  const sortedPlaces = useMemo(() => {
+    return [...filteredPlaces].sort((a, b) => {
+      const dateA = a.dateReviewed ? new Date(a.dateReviewed).getTime() : 0;
+      const dateB = b.dateReviewed ? new Date(b.dateReviewed).getTime() : 0;
+      return dateA - dateB; // Ascending order: oldest first, newest last
+    });
+  }, [filteredPlaces]);
+
   if (loading) {
     return <LoadingPage />;
   }
@@ -53,7 +62,7 @@ export default function Map() {
         setFilters={setFilters}
         isOpen={filterOpen}
         setIsOpen={setFilterOpen}
-        resultsCount={filteredPlaces.length}
+        resultsCount={sortedPlaces.length}
       />
 
       {/* Main Content */}
@@ -62,7 +71,7 @@ export default function Map() {
         <div className="bg-white border-b border-[#FFF5F7] px-4 py-3 flex flex-col sm:flex-row sm:items-center gap-3 sm:justify-between">
           <div className="flex items-center gap-4">
             <h1 className="font-heading text-xl font-semibold text-[#4A4A4A]">
-              {filteredPlaces.length} Food Spots
+              {sortedPlaces.length} Food Spots
             </h1>
             {/* Location Tabs */}
             <div className="flex items-center gap-1 bg-[#FFF5F7] rounded-lg p-1">
@@ -111,7 +120,7 @@ export default function Map() {
         <div className="flex-1 relative">
           {viewMode === 'map' ? (
             <FoodMap
-              places={filteredPlaces}
+              places={sortedPlaces}
               selectedPlace={selectedPlace}
               setSelectedPlace={setSelectedPlace}
             />
@@ -123,14 +132,14 @@ export default function Map() {
                     <LoadingCard key={i} />
                   ))}
                 </div>
-              ) : filteredPlaces.length === 0 ? (
+              ) : sortedPlaces.length === 0 ? (
                 <div className="text-center py-12">
                   <p className="text-[#4A4A4A] text-lg">No spots found matching your filters</p>
                   <p className="text-[#4A4A4A]/70 mt-2">Try adjusting your search criteria</p>
                 </div>
               ) : (
                 <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-4">
-                  {filteredPlaces.map((place) => (
+                  {sortedPlaces.map((place) => (
                     <PlaceCard key={place.id} place={place} />
                   ))}
                 </div>
