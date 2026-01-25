@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
-import type { Place, FilterState, CuisineType, PriceRange } from '../types';
+import type { Place, FilterState, CuisineType, PriceRange, FilterCategory } from '../types';
+import { CATEGORY_TO_CUISINES } from '../types';
 import { fetchPlaces, fetchPlaceById, fetchFeaturedPlaces } from '../lib/notion';
 import { mockPlaces, getMockPlaceById, getMockFeaturedPlaces } from '../lib/mockData';
 
@@ -107,9 +108,24 @@ export function useFeaturedPlaces() {
 
 export function useFilteredPlaces(places: Place[], filters: FilterState) {
   return useMemo(() => {
+    // Get all cuisine types that match selected categories
+    let selectedCuisines: CuisineType[] = filters.categories.flatMap(
+      category => CATEGORY_TO_CUISINES[category]
+    );
+
+    // If Asian is selected and there are specific Asian cuisine sub-filters,
+    // replace the Asian cuisines with only the selected ones
+    if (filters.categories.includes('Asian') && filters.asianCuisines.length > 0) {
+      // Remove all Asian cuisines from selectedCuisines
+      const asianCuisineSet = new Set(CATEGORY_TO_CUISINES['Asian']);
+      selectedCuisines = selectedCuisines.filter(c => !asianCuisineSet.has(c));
+      // Add back only the selected Asian sub-cuisines
+      selectedCuisines = [...selectedCuisines, ...filters.asianCuisines];
+    }
+
     return places.filter(place => {
-      // Filter by cuisine type
-      if (filters.cuisineTypes.length > 0 && !filters.cuisineTypes.includes(place.cuisineType)) {
+      // Filter by category (which maps to cuisine types)
+      if (selectedCuisines.length > 0 && !selectedCuisines.includes(place.cuisineType)) {
         return false;
       }
 
@@ -154,7 +170,21 @@ export const CUISINE_TYPES: CuisineType[] = [
   'Fusion',
   'Dessert',
   'Cafe',
+  'Coffee',
+  'Bar',
   'Other',
+];
+
+// User-friendly filter categories with icons/emojis
+export const FILTER_CATEGORIES: { category: FilterCategory; label: string; icon: string }[] = [
+  { category: 'Asian', label: 'Asian', icon: '🍜' },
+  { category: 'Latin', label: 'Latin', icon: '🌮' },
+  { category: 'European', label: 'European', icon: '🍝' },
+  { category: 'American', label: 'American', icon: '🍔' },
+  { category: 'Sweet Treats', label: 'Sweet Treats', icon: '🍰' },
+  { category: 'Coffee & Cafe', label: 'Coffee & Cafe', icon: '☕' },
+  { category: 'Bars & Drinks', label: 'Bars & Drinks', icon: '🍸' },
+  { category: 'Other', label: 'Other', icon: '🍽️' },
 ];
 
 export const PRICE_RANGES: PriceRange[] = ['$', '$$', '$$$', '$$$$'];

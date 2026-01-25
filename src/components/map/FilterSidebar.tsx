@@ -1,8 +1,9 @@
 import { Fragment } from 'react';
 import { Dialog, Transition, Disclosure } from '@headlessui/react';
 import { XMarkIcon, ChevronDownIcon, FunnelIcon } from '@heroicons/react/24/outline';
-import type { FilterState, CuisineType, PriceRange } from '../../types';
-import { CUISINE_TYPES, PRICE_RANGES } from '../../hooks/usePlaces';
+import type { FilterState, FilterCategory, PriceRange, AsianCuisine } from '../../types';
+import { ASIAN_CUISINES } from '../../types';
+import { FILTER_CATEGORIES, PRICE_RANGES } from '../../hooks/usePlaces';
 import Button from '../ui/Button';
 
 interface FilterSidebarProps {
@@ -20,12 +21,26 @@ export default function FilterSidebar({
   setIsOpen,
   resultsCount,
 }: FilterSidebarProps) {
-  const handleCuisineToggle = (cuisine: CuisineType) => {
+  const handleCategoryToggle = (category: FilterCategory) => {
+    setFilters(prev => {
+      const isRemoving = prev.categories.includes(category);
+      return {
+        ...prev,
+        categories: isRemoving
+          ? prev.categories.filter(c => c !== category)
+          : [...prev.categories, category],
+        // Clear Asian sub-filters if Asian category is being removed
+        asianCuisines: category === 'Asian' && isRemoving ? [] : prev.asianCuisines,
+      };
+    });
+  };
+
+  const handleAsianCuisineToggle = (cuisine: AsianCuisine) => {
     setFilters(prev => ({
       ...prev,
-      cuisineTypes: prev.cuisineTypes.includes(cuisine)
-        ? prev.cuisineTypes.filter(c => c !== cuisine)
-        : [...prev.cuisineTypes, cuisine],
+      asianCuisines: prev.asianCuisines.includes(cuisine)
+        ? prev.asianCuisines.filter(c => c !== cuisine)
+        : [...prev.asianCuisines, cuisine],
     }));
   };
 
@@ -44,14 +59,18 @@ export default function FilterSidebar({
 
   const clearFilters = () => {
     setFilters({
-      cuisineTypes: [],
+      categories: [],
+      asianCuisines: [],
       priceRanges: [],
       minRating: 0,
       searchQuery: '',
     });
   };
 
-  const hasActiveFilters = filters.cuisineTypes.length > 0 ||
+  const isAsianSelected = filters.categories.includes('Asian');
+
+  const hasActiveFilters = filters.categories.length > 0 ||
+    filters.asianCuisines.length > 0 ||
     filters.priceRanges.length > 0 ||
     filters.minRating > 0 ||
     filters.searchQuery;
@@ -60,7 +79,7 @@ export default function FilterSidebar({
     <div className="space-y-6">
       {/* Search */}
       <div>
-        <label className="block text-sm font-medium text-[#6B5B5B] mb-2">
+        <label className="block text-sm font-medium text-[#4A4A4A] mb-2">
           Search
         </label>
         <input
@@ -68,34 +87,68 @@ export default function FilterSidebar({
           value={filters.searchQuery}
           onChange={(e) => setFilters(prev => ({ ...prev, searchQuery: e.target.value }))}
           placeholder="Search by name or location..."
-          className="w-full px-4 py-2 border border-[#FFF9E6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF6B6B] focus:border-transparent bg-white"
+          className="w-full px-4 py-2 border border-[#FFF5F7] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F8A5B8] focus:border-transparent bg-white"
         />
       </div>
 
-      {/* Cuisine Type */}
+      {/* Category - Clean Grid Layout */}
       <Disclosure defaultOpen>
         {({ open }) => (
           <>
             <Disclosure.Button className="flex items-center justify-between w-full text-left">
-              <span className="text-sm font-medium text-[#6B5B5B]">Cuisine Type</span>
-              <ChevronDownIcon className={`w-5 h-5 text-[#6B5B5B] transition-transform ${open ? 'rotate-180' : ''}`} />
+              <span className="text-sm font-medium text-[#4A4A4A]">What are you craving?</span>
+              <ChevronDownIcon className={`w-5 h-5 text-[#4A4A4A] transition-transform ${open ? 'rotate-180' : ''}`} />
             </Disclosure.Button>
-            <Disclosure.Panel className="mt-3">
-              <div className="flex flex-wrap gap-2">
-                {CUISINE_TYPES.map((cuisine) => (
+            <Disclosure.Panel className="mt-3 space-y-3">
+              <div className="grid grid-cols-2 gap-2">
+                {FILTER_CATEGORIES.map(({ category, label, icon }) => (
                   <button
-                    key={cuisine}
-                    onClick={() => handleCuisineToggle(cuisine)}
-                    className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
-                      filters.cuisineTypes.includes(cuisine)
-                        ? 'bg-[#FF6B6B] text-white'
-                        : 'bg-[#FFF9E6] text-[#6B5B5B] hover:bg-[#FFEAA7]'
+                    key={category}
+                    onClick={() => handleCategoryToggle(category)}
+                    className={`flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
+                      filters.categories.includes(category)
+                        ? 'bg-[#F8A5B8] text-white shadow-md'
+                        : 'bg-[#FFF5F7] text-[#4A4A4A] hover:bg-[#FDD5DD] hover:shadow-sm'
                     }`}
                   >
-                    {cuisine}
+                    <span className="text-base">{icon}</span>
+                    <span>{label}</span>
                   </button>
                 ))}
               </div>
+
+              {/* Asian Sub-filters - shown when Asian is selected */}
+              {isAsianSelected && (
+                <div className="pl-2 border-l-2 border-[#F8A5B8]/30 space-y-2 animate-slide-up-fade">
+                  <p className="text-xs font-medium text-[#4A4A4A]/70 uppercase tracking-wide">
+                    Narrow down Asian
+                  </p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {ASIAN_CUISINES.map(({ cuisine, label, icon }) => (
+                      <button
+                        key={cuisine}
+                        onClick={() => handleAsianCuisineToggle(cuisine)}
+                        className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 ${
+                          filters.asianCuisines.includes(cuisine)
+                            ? 'bg-[#F8A5B8] text-white shadow-sm'
+                            : 'bg-[#FFF5F7] text-[#4A4A4A] hover:bg-[#FDD5DD]'
+                        }`}
+                      >
+                        <span>{icon}</span>
+                        <span>{label}</span>
+                      </button>
+                    ))}
+                  </div>
+                  {filters.asianCuisines.length > 0 && (
+                    <button
+                      onClick={() => setFilters(prev => ({ ...prev, asianCuisines: [] }))}
+                      className="text-xs text-[#F8A5B8] hover:underline"
+                    >
+                      Show all Asian
+                    </button>
+                  )}
+                </div>
+              )}
             </Disclosure.Panel>
           </>
         )}
@@ -106,8 +159,8 @@ export default function FilterSidebar({
         {({ open }) => (
           <>
             <Disclosure.Button className="flex items-center justify-between w-full text-left">
-              <span className="text-sm font-medium text-[#6B5B5B]">Price Range</span>
-              <ChevronDownIcon className={`w-5 h-5 text-[#6B5B5B] transition-transform ${open ? 'rotate-180' : ''}`} />
+              <span className="text-sm font-medium text-[#4A4A4A]">Price Range</span>
+              <ChevronDownIcon className={`w-5 h-5 text-[#4A4A4A] transition-transform ${open ? 'rotate-180' : ''}`} />
             </Disclosure.Button>
             <Disclosure.Panel className="mt-3">
               <div className="flex gap-2">
@@ -115,10 +168,10 @@ export default function FilterSidebar({
                   <button
                     key={price}
                     onClick={() => handlePriceToggle(price)}
-                    className={`flex-1 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    className={`flex-1 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
                       filters.priceRanges.includes(price)
-                        ? 'bg-[#FF6B6B] text-white'
-                        : 'bg-[#FFF9E6] text-[#6B5B5B] hover:bg-[#FFEAA7]'
+                        ? 'bg-[#F8A5B8] text-white shadow-md'
+                        : 'bg-[#FFF5F7] text-[#4A4A4A] hover:bg-[#FDD5DD]'
                     }`}
                   >
                     {price}
@@ -135,8 +188,8 @@ export default function FilterSidebar({
         {({ open }) => (
           <>
             <Disclosure.Button className="flex items-center justify-between w-full text-left">
-              <span className="text-sm font-medium text-[#6B5B5B]">Minimum Rating</span>
-              <ChevronDownIcon className={`w-5 h-5 text-[#6B5B5B] transition-transform ${open ? 'rotate-180' : ''}`} />
+              <span className="text-sm font-medium text-[#4A4A4A]">Minimum Rating</span>
+              <ChevronDownIcon className={`w-5 h-5 text-[#4A4A4A] transition-transform ${open ? 'rotate-180' : ''}`} />
             </Disclosure.Button>
             <Disclosure.Panel className="mt-3">
               <div className="flex gap-2">
@@ -144,10 +197,10 @@ export default function FilterSidebar({
                   <button
                     key={rating}
                     onClick={() => handleRatingChange(rating)}
-                    className={`flex-1 px-2 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    className={`flex-1 px-2 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
                       filters.minRating === rating
-                        ? 'bg-[#FF6B6B] text-white'
-                        : 'bg-[#FFF9E6] text-[#6B5B5B] hover:bg-[#FFEAA7]'
+                        ? 'bg-[#F8A5B8] text-white shadow-md'
+                        : 'bg-[#FFF5F7] text-[#4A4A4A] hover:bg-[#FDD5DD]'
                     }`}
                   >
                     {rating === 0 ? 'Any' : `${rating}+`}
@@ -160,15 +213,15 @@ export default function FilterSidebar({
       </Disclosure>
 
       {/* Results count & clear */}
-      <div className="pt-4 border-t border-[#FFF9E6]">
+      <div className="pt-4 border-t border-[#FFF5F7]">
         <div className="flex items-center justify-between">
-          <p className="text-sm text-[#6B5B5B]">
+          <p className="text-sm text-[#4A4A4A]">
             <span className="font-semibold">{resultsCount}</span> spots found
           </p>
           {hasActiveFilters && (
             <button
               onClick={clearFilters}
-              className="text-sm text-[#FF6B6B] hover:underline"
+              className="text-sm text-[#F8A5B8] hover:underline font-medium"
             >
               Clear all
             </button>
@@ -181,9 +234,9 @@ export default function FilterSidebar({
   return (
     <>
       {/* Desktop Sidebar */}
-      <div className="hidden lg:block w-80 bg-white border-r border-[#FFF9E6] p-6 overflow-y-auto">
-        <h2 className="font-heading text-xl font-semibold text-[#6B5B5B] mb-6">
-          Filter Spots
+      <div className="hidden lg:block w-80 bg-white border-r border-[#FFF5F7] p-6 overflow-y-auto">
+        <h2 className="font-heading text-xl font-semibold text-[#4A4A4A] mb-6">
+          Find Your Spot
         </h2>
         <FilterContent />
       </div>
@@ -191,12 +244,12 @@ export default function FilterSidebar({
       {/* Mobile Filter Button */}
       <button
         onClick={() => setIsOpen(true)}
-        className="lg:hidden fixed bottom-6 right-6 z-40 bg-[#FF6B6B] text-white p-4 rounded-full shadow-lg hover:bg-[#E07A5F] transition-colors"
+        className="lg:hidden fixed bottom-6 right-6 z-40 bg-[#F8A5B8] text-white p-4 rounded-full shadow-lg hover:bg-[#E8899C] transition-colors"
       >
         <FunnelIcon className="w-6 h-6" />
         {hasActiveFilters && (
-          <span className="absolute -top-1 -right-1 w-5 h-5 bg-[#E07A5F] rounded-full text-xs flex items-center justify-center">
-            {filters.cuisineTypes.length + filters.priceRanges.length + (filters.minRating > 0 ? 1 : 0)}
+          <span className="absolute -top-1 -right-1 w-5 h-5 bg-[#E8899C] rounded-full text-xs flex items-center justify-center">
+            {filters.categories.length + filters.asianCuisines.length + filters.priceRanges.length + (filters.minRating > 0 ? 1 : 0)}
           </span>
         )}
       </button>
@@ -230,13 +283,13 @@ export default function FilterSidebar({
                 >
                   <Dialog.Panel className="pointer-events-auto w-screen max-w-sm">
                     <div className="flex h-full flex-col bg-white shadow-xl">
-                      <div className="flex items-center justify-between px-6 py-4 border-b border-[#FFF9E6]">
-                        <Dialog.Title className="font-heading text-xl font-semibold text-[#6B5B5B]">
-                          Filter Spots
+                      <div className="flex items-center justify-between px-6 py-4 border-b border-[#FFF5F7]">
+                        <Dialog.Title className="font-heading text-xl font-semibold text-[#4A4A4A]">
+                          Find Your Spot
                         </Dialog.Title>
                         <button
                           onClick={() => setIsOpen(false)}
-                          className="p-2 rounded-lg text-[#6B5B5B] hover:bg-[#FFF9E6]"
+                          className="p-2 rounded-lg text-[#4A4A4A] hover:bg-[#FFF5F7]"
                         >
                           <XMarkIcon className="w-6 h-6" />
                         </button>
@@ -244,7 +297,7 @@ export default function FilterSidebar({
                       <div className="flex-1 px-6 py-6 overflow-y-auto">
                         <FilterContent />
                       </div>
-                      <div className="px-6 py-4 border-t border-[#FFF9E6]">
+                      <div className="px-6 py-4 border-t border-[#FFF5F7]">
                         <Button onClick={() => setIsOpen(false)} className="w-full">
                           Show {resultsCount} Results
                         </Button>
