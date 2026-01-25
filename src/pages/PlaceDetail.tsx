@@ -46,10 +46,10 @@ export default function PlaceDetail() {
 
   if (error || !place) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#FFFBF5]">
+      <div className="min-h-screen flex items-center justify-center bg-[#FFFBFC]">
         <div className="text-center">
-          <h1 className="font-heading text-2xl font-bold text-[#6B5B5B]">Place not found</h1>
-          <p className="text-[#6B5B5B]/70 mt-2">This spot might have been removed or doesn't exist.</p>
+          <h1 className="font-heading text-2xl font-bold text-[#4A4A4A]">Place not found</h1>
+          <p className="text-[#4A4A4A]/70 mt-2">This spot might have been removed or doesn't exist.</p>
           <Link to="/map" className="mt-6 inline-block">
             <Button>Back to Map</Button>
           </Link>
@@ -59,7 +59,7 @@ export default function PlaceDetail() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FFFBF5]">
+    <div className="min-h-screen bg-[#FFFBFC]">
       {/* Hero Image */}
       <div className="relative h-[40vh] sm:h-[50vh]">
         <img
@@ -74,7 +74,7 @@ export default function PlaceDetail() {
           to="/map"
           className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm p-3 rounded-full shadow-lg hover:bg-white transition-colors"
         >
-          <ArrowLeftIcon className="w-5 h-5 text-[#6B5B5B]" />
+          <ArrowLeftIcon className="w-5 h-5 text-[#4A4A4A]" />
         </Link>
 
         {/* Share Button */}
@@ -82,7 +82,7 @@ export default function PlaceDetail() {
           onClick={handleShare}
           className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm p-3 rounded-full shadow-lg hover:bg-white transition-colors"
         >
-          <ShareIcon className="w-5 h-5 text-[#6B5B5B]" />
+          <ShareIcon className="w-5 h-5 text-[#4A4A4A]" />
         </button>
 
         {/* Title Overlay */}
@@ -112,10 +112,10 @@ export default function PlaceDetail() {
           <div className="lg:col-span-2 space-y-8">
             {/* Review */}
             <section>
-              <h2 className="font-heading text-2xl font-semibold text-[#6B5B5B] mb-4">
+              <h2 className="font-heading text-2xl font-semibold text-[#4A4A4A] mb-4">
                 Chloe's Review
               </h2>
-              <div className="prose prose-lg max-w-none text-[#6B5B5B]/90">
+              <div className="prose prose-lg max-w-none text-[#4A4A4A]/90">
                 <p className="whitespace-pre-line">{place.reviewContent}</p>
               </div>
             </section>
@@ -123,7 +123,7 @@ export default function PlaceDetail() {
             {/* TikTok Video */}
             {place.tikTokUrl && (
               <section>
-                <h2 className="font-heading text-2xl font-semibold text-[#6B5B5B] mb-4">
+                <h2 className="font-heading text-2xl font-semibold text-[#4A4A4A] mb-4">
                   Watch My TikTok Review
                 </h2>
                 <TikTokEmbed url={place.tikTokUrl} />
@@ -133,7 +133,7 @@ export default function PlaceDetail() {
             {/* Instagram Post */}
             {place.instagramUrl && (
               <section>
-                <h2 className="font-heading text-2xl font-semibold text-[#6B5B5B] mb-4">
+                <h2 className="font-heading text-2xl font-semibold text-[#4A4A4A] mb-4">
                   See It on Instagram
                 </h2>
                 <InstagramEmbed url={place.instagramUrl} />
@@ -144,27 +144,27 @@ export default function PlaceDetail() {
           {/* Sidebar */}
           <div className="lg:col-span-1">
             <div className="bg-white rounded-2xl shadow-md p-6 sticky top-24">
-              <h3 className="font-heading text-xl font-semibold text-[#6B5B5B] mb-4">
+              <h3 className="font-heading text-xl font-semibold text-[#4A4A4A] mb-4">
                 Details
               </h3>
 
               <div className="space-y-4">
                 {/* Address */}
                 <div className="flex items-start gap-3">
-                  <MapPinIcon className="w-5 h-5 text-[#FF6B6B] flex-shrink-0 mt-0.5" />
+                  <MapPinIcon className="w-5 h-5 text-[#F8A5B8] flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="text-sm font-medium text-[#6B5B5B]">Address</p>
-                    <p className="text-[#6B5B5B]/70">{place.address}</p>
+                    <p className="text-sm font-medium text-[#4A4A4A]">Address</p>
+                    <p className="text-[#4A4A4A]/70">{place.address}</p>
                   </div>
                 </div>
 
                 {/* Hours */}
                 {place.hours && (
                   <div className="flex items-start gap-3">
-                    <ClockIcon className="w-5 h-5 text-[#FF6B6B] flex-shrink-0 mt-0.5" />
+                    <ClockIcon className="w-5 h-5 text-[#F8A5B8] flex-shrink-0 mt-0.5" />
                     <div>
-                      <p className="text-sm font-medium text-[#6B5B5B]">Hours</p>
-                      <p className="text-[#6B5B5B]/70">{place.hours}</p>
+                      <p className="text-sm font-medium text-[#4A4A4A]">Hours</p>
+                      <p className="text-[#4A4A4A]/70">{place.hours}</p>
                     </div>
                   </div>
                 )}
@@ -172,12 +172,12 @@ export default function PlaceDetail() {
                 {/* Phone */}
                 {place.phone && (
                   <div className="flex items-start gap-3">
-                    <PhoneIcon className="w-5 h-5 text-[#FF6B6B] flex-shrink-0 mt-0.5" />
+                    <PhoneIcon className="w-5 h-5 text-[#F8A5B8] flex-shrink-0 mt-0.5" />
                     <div>
-                      <p className="text-sm font-medium text-[#6B5B5B]">Phone</p>
+                      <p className="text-sm font-medium text-[#4A4A4A]">Phone</p>
                       <a
                         href={`tel:${place.phone}`}
-                        className="text-[#FF6B6B] hover:underline"
+                        className="text-[#F8A5B8] hover:underline"
                       >
                         {place.phone}
                       </a>
@@ -188,14 +188,14 @@ export default function PlaceDetail() {
                 {/* Website */}
                 {place.website && (
                   <div className="flex items-start gap-3">
-                    <GlobeAltIcon className="w-5 h-5 text-[#FF6B6B] flex-shrink-0 mt-0.5" />
+                    <GlobeAltIcon className="w-5 h-5 text-[#F8A5B8] flex-shrink-0 mt-0.5" />
                     <div>
-                      <p className="text-sm font-medium text-[#6B5B5B]">Website</p>
+                      <p className="text-sm font-medium text-[#4A4A4A]">Website</p>
                       <a
                         href={place.website}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-[#FF6B6B] hover:underline break-all"
+                        className="text-[#F8A5B8] hover:underline break-all"
                       >
                         Visit Website
                       </a>
@@ -219,7 +219,7 @@ export default function PlaceDetail() {
               {/* Share Button */}
               <button
                 onClick={handleShare}
-                className="w-full mt-3 flex items-center justify-center gap-2 px-4 py-3 border-2 border-[#FFF9E6] rounded-full text-[#6B5B5B] hover:bg-[#FFF9E6] transition-colors font-medium"
+                className="w-full mt-3 flex items-center justify-center gap-2 px-4 py-3 border-2 border-[#FFF5F7] rounded-full text-[#4A4A4A] hover:bg-[#FFF5F7] transition-colors font-medium"
               >
                 <ShareIcon className="w-5 h-5" />
                 Share This Spot

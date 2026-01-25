@@ -64,13 +64,13 @@ export default function InstagramEmbed({ url }: InstagramEmbedProps) {
 
   if (error || !postId) {
     return (
-      <div className="bg-[#FFF9E6] rounded-xl p-8 text-center">
-        <p className="text-[#6B5B5B]">Unable to load Instagram post</p>
+      <div className="bg-[#FFF5F7] rounded-xl p-8 text-center">
+        <p className="text-[#4A4A4A]">Unable to load Instagram post</p>
         <a
           href={url}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-[#FF6B6B] hover:underline mt-2 inline-block"
+          className="text-[#F8A5B8] hover:underline mt-2 inline-block"
         >
           View on Instagram
         </a>
@@ -84,7 +84,7 @@ export default function InstagramEmbed({ url }: InstagramEmbedProps) {
   return (
     <div className="relative">
       {loading && (
-        <div className="absolute inset-0 flex items-center justify-center bg-[#FFF9E6] rounded-xl min-h-[400px]">
+        <div className="absolute inset-0 flex items-center justify-center bg-[#FFF5F7] rounded-xl min-h-[400px]">
           <Loading text="Loading Instagram..." />
         </div>
       )}
@@ -119,7 +119,7 @@ export default function InstagramEmbed({ url }: InstagramEmbedProps) {
               }}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[#FF6B6B] hover:underline"
+              className="text-[#F8A5B8] hover:underline"
             >
               View this post on Instagram
             </a>

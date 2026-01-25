@@ -93,10 +93,10 @@ export default function FoodMap({ places, selectedPlace, setSelectedPlace }: Foo
 
   if (loadError) {
     return (
-      <div className="h-full flex items-center justify-center bg-[#FFF9E6]">
+      <div className="h-full flex items-center justify-center bg-[#FFF5F7]">
         <div className="text-center p-8">
-          <p className="text-[#6B5B5B] mb-2">Unable to load map</p>
-          <p className="text-sm text-[#6B5B5B]/70">
+          <p className="text-[#4A4A4A] mb-2">Unable to load map</p>
+          <p className="text-sm text-[#4A4A4A]/70">
             Please check your Google Maps API key configuration
           </p>
         </div>
@@ -106,7 +106,7 @@ export default function FoodMap({ places, selectedPlace, setSelectedPlace }: Foo
 
   if (!isLoaded) {
     return (
-      <div className="h-full flex items-center justify-center bg-[#FFF9E6]">
+      <div className="h-full flex items-center justify-center bg-[#FFF5F7]">
         <Loading text="Loading map..." />
       </div>
     );
@@ -130,9 +130,9 @@ export default function FoodMap({ places, selectedPlace, setSelectedPlace }: Foo
           icon={{
             url: `data:image/svg+xml,${encodeURIComponent(`
               <svg width="40" height="48" viewBox="0 0 40 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M20 0C8.954 0 0 8.954 0 20c0 14.667 20 28 20 28s20-13.333 20-28c0-11.046-8.954-20-20-20z" fill="${selectedPlace?.id === place.id ? '#E07A5F' : '#FF6B6B'}"/>
+                <path d="M20 0C8.954 0 0 8.954 0 20c0 14.667 20 28 20 28s20-13.333 20-28c0-11.046-8.954-20-20-20z" fill="${selectedPlace?.id === place.id ? '#E8899C' : '#F8A5B8'}"/>
                 <circle cx="20" cy="18" r="8" fill="white"/>
-                <text x="20" y="22" font-family="Arial" font-size="10" font-weight="bold" fill="#FF6B6B" text-anchor="middle">${place.priceRange.length}</text>
+                <text x="20" y="22" font-family="Arial" font-size="10" font-weight="bold" fill="#F8A5B8" text-anchor="middle">${place.priceRange.length}</text>
               </svg>
             `)}`,
             scaledSize: new google.maps.Size(40, 48),

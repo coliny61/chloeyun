@@ -21,14 +21,14 @@ export default function PlaceCard({ place, compact = false }: PlaceCardProps) {
             className="w-20 h-20 rounded-lg object-cover flex-shrink-0"
           />
           <div className="flex-1 min-w-0">
-            <h3 className="font-heading font-semibold text-[#6B5B5B] truncate">
+            <h3 className="font-heading font-semibold text-[#4A4A4A] truncate">
               {place.name}
             </h3>
             <div className="flex items-center gap-2 mt-1">
               <Badge variant="cuisine" className="text-xs px-2 py-0.5">
                 {place.cuisineType}
               </Badge>
-              <span className="text-[#E07A5F] font-medium text-sm">{place.priceRange}</span>
+              <span className="text-[#E8899C] font-medium text-sm">{place.priceRange}</span>
             </div>
             <div className="mt-1">
               <Rating value={place.rating} size="sm" showValue />
@@ -38,7 +38,7 @@ export default function PlaceCard({ place, compact = false }: PlaceCardProps) {
         <div className="mt-3 flex gap-2">
           <Link
             to={`/place/${place.id}`}
-            className="flex-1 bg-[#FF6B6B] text-white text-center py-2 rounded-lg text-sm font-medium hover:bg-[#E07A5F] transition-colors"
+            className="flex-1 bg-[#F8A5B8] text-white text-center py-2 rounded-lg text-sm font-medium hover:bg-[#E8899C] transition-colors"
           >
             View Details
           </Link>
@@ -46,7 +46,7 @@ export default function PlaceCard({ place, compact = false }: PlaceCardProps) {
             href={getGoogleMapsUrl(place.address)}
             target="_blank"
             rel="noopener noreferrer"
-            className="px-3 py-2 bg-[#FFF9E6] text-[#6B5B5B] rounded-lg hover:bg-[#FFEAA7] transition-colors"
+            className="px-3 py-2 bg-[#FFF5F7] text-[#4A4A4A] rounded-lg hover:bg-[#FDD5DD] transition-colors"
           >
             <ArrowTopRightOnSquareIcon className="w-5 h-5" />
           </a>
@@ -74,7 +74,7 @@ export default function PlaceCard({ place, compact = false }: PlaceCardProps) {
       </div>
       <div className="p-4">
         <div className="flex items-start justify-between gap-2">
-          <h3 className="font-heading text-lg font-semibold text-[#6B5B5B] group-hover:text-[#FF6B6B] transition-colors">
+          <h3 className="font-heading text-lg font-semibold text-[#4A4A4A] group-hover:text-[#F8A5B8] transition-colors">
             {place.name}
           </h3>
         </div>
@@ -82,11 +82,11 @@ export default function PlaceCard({ place, compact = false }: PlaceCardProps) {
           <Badge variant="cuisine">{place.cuisineType}</Badge>
           <Rating value={place.rating} size="sm" showValue />
         </div>
-        <p className="mt-2 text-sm text-[#6B5B5B]/70 flex items-center gap-1">
+        <p className="mt-2 text-sm text-[#4A4A4A]/70 flex items-center gap-1">
           <MapPinIcon className="w-4 h-4 flex-shrink-0" />
           <span className="truncate">{place.address}</span>
         </p>
-        <p className="mt-2 text-sm text-[#6B5B5B]/80 line-clamp-2">
+        <p className="mt-2 text-sm text-[#4A4A4A]/80 line-clamp-2">
           {truncateText(place.reviewContent, 100)}
         </p>
       </div>

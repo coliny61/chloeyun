@@ -24,27 +24,27 @@ export default function Rating({ value, max = 5, size = 'md', showValue = false 
       <div className="flex">
         {/* Full stars */}
         {Array.from({ length: fullStars }).map((_, i) => (
-          <StarIcon key={`full-${i}`} className={`${sizes[size]} text-[#FFEAA7]`} />
+          <StarIcon key={`full-${i}`} className={`${sizes[size]} text-[#FDD5DD]`} />
         ))}
 
         {/* Half star */}
         {hasHalfStar && (
           <div className="relative">
-            <StarOutlineIcon className={`${sizes[size]} text-[#FFEAA7]`} />
+            <StarOutlineIcon className={`${sizes[size]} text-[#FDD5DD]`} />
             <div className="absolute inset-0 overflow-hidden w-1/2">
-              <StarIcon className={`${sizes[size]} text-[#FFEAA7]`} />
+              <StarIcon className={`${sizes[size]} text-[#FDD5DD]`} />
             </div>
           </div>
         )}
 
         {/* Empty stars */}
         {Array.from({ length: emptyStars }).map((_, i) => (
-          <StarOutlineIcon key={`empty-${i}`} className={`${sizes[size]} text-[#FFEAA7]`} />
+          <StarOutlineIcon key={`empty-${i}`} className={`${sizes[size]} text-[#FDD5DD]`} />
         ))}
       </div>
 
       {showValue && (
-        <span className="text-[#6B5B5B] font-medium ml-1">
+        <span className="text-[#4A4A4A] font-medium ml-1">
           {value.toFixed(1)}
         </span>
       )}

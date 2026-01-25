@@ -22,25 +22,25 @@ export default function Loading({ size = 'md', text }: LoadingProps) {
             cx="12"
             cy="12"
             r="10"
-            stroke="#FFF9E6"
+            stroke="#FFF5F7"
             strokeWidth="3"
           />
           <path
             d="M12 2a10 10 0 0 1 10 10"
-            stroke="#FF6B6B"
+            stroke="#F8A5B8"
             strokeWidth="3"
             strokeLinecap="round"
           />
         </svg>
       </div>
-      {text && <p className="text-[#6B5B5B] font-medium">{text}</p>}
+      {text && <p className="text-[#4A4A4A] font-medium">{text}</p>}
     </div>
   );
 }
 
 export function LoadingPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#FFFBF5]">
+    <div className="min-h-screen flex items-center justify-center bg-[#FFFBFC]">
       <Loading size="lg" text="Loading delicious spots..." />
     </div>
   );
@@ -49,11 +49,11 @@ export function LoadingPage() {
 export function LoadingCard() {
   return (
     <div className="bg-white rounded-2xl shadow-md overflow-hidden animate-pulse">
-      <div className="h-48 bg-[#FFF9E6]" />
+      <div className="h-48 bg-[#FFF5F7]" />
       <div className="p-4 space-y-3">
-        <div className="h-6 bg-[#FFF9E6] rounded w-3/4" />
-        <div className="h-4 bg-[#FFF9E6] rounded w-1/2" />
-        <div className="h-4 bg-[#FFF9E6] rounded w-full" />
+        <div className="h-6 bg-[#FFF5F7] rounded w-3/4" />
+        <div className="h-4 bg-[#FFF5F7] rounded w-1/2" />
+        <div className="h-4 bg-[#FFF5F7] rounded w-full" />
       </div>
     </div>
   );

@@ -4,17 +4,17 @@ import Stats from '../components/home/Stats';
 
 export default function About() {
   return (
-    <div className="min-h-screen bg-[#FFFBF5]">
+    <div className="min-h-screen bg-[#FFFBFC]">
       {/* Hero Section */}
-      <section className="py-20 bg-gradient-to-br from-[#FFF9E6] via-[#FFFBF5] to-[#FFEAA7]/30">
+      <section className="py-20 bg-gradient-to-br from-[#FFF5F7] via-[#FFFBFC] to-[#FDD5DD]/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="order-2 lg:order-1">
-              <h1 className="font-heading text-4xl sm:text-5xl font-bold text-[#6B5B5B]">
+              <h1 className="font-heading text-4xl sm:text-5xl font-bold text-[#4A4A4A]">
                 Hey there! I'm
-                <span className="block text-[#FF6B6B]">Chloe Yun</span>
+                <span className="block text-[#F8A5B8]">Chloe Yun</span>
               </h1>
-              <p className="mt-6 text-lg text-[#6B5B5B]/80 leading-relaxed">
+              <p className="mt-6 text-lg text-[#4A4A4A]/80 leading-relaxed">
                 I'm a food content creator based in Dallas-Fort Worth, on a mission to discover and share
                 the most delicious spots with my amazing community. From hole-in-the-wall gems to
                 trendy new restaurants, I'm always on the hunt for my next great meal!
@@ -43,8 +43,8 @@ export default function About() {
                 className="rounded-3xl shadow-2xl w-full object-cover aspect-[4/5]"
               />
               <div className="absolute -bottom-6 -left-6 bg-white rounded-2xl shadow-xl p-4">
-                <p className="font-heading text-2xl font-bold text-[#FF6B6B]">DFW</p>
-                <p className="text-sm text-[#6B5B5B]">Based & Eating</p>
+                <p className="font-heading text-2xl font-bold text-[#F8A5B8]">DFW</p>
+                <p className="text-sm text-[#4A4A4A]">Based & Eating</p>
               </div>
             </div>
           </div>
@@ -57,10 +57,10 @@ export default function About() {
       {/* My Story Section */}
       <section className="py-20 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-3xl sm:text-4xl font-bold text-[#6B5B5B] text-center">
+          <h2 className="font-heading text-3xl sm:text-4xl font-bold text-[#4A4A4A] text-center">
             My Food Journey
           </h2>
-          <div className="mt-12 prose prose-lg max-w-none text-[#6B5B5B]/80">
+          <div className="mt-12 prose prose-lg max-w-none text-[#4A4A4A]/80">
             <p>
               Growing up in a Korean-American household, food was always at the center of everything.
               From helping my grandmother make kimchi to exploring the diverse food scene of DFW,
@@ -81,9 +81,9 @@ export default function About() {
       </section>
 
       {/* What I Do Section */}
-      <section className="py-20 bg-[#FFF9E6]">
+      <section className="py-20 bg-[#FFF5F7]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-3xl sm:text-4xl font-bold text-[#6B5B5B] text-center">
+          <h2 className="font-heading text-3xl sm:text-4xl font-bold text-[#4A4A4A] text-center">
             What I Do
           </h2>
           <div className="mt-12 grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -121,10 +121,10 @@ export default function About() {
             ].map((item, index) => (
               <div key={index} className="bg-white rounded-2xl p-6 shadow-md">
                 <span className="text-4xl">{item.icon}</span>
-                <h3 className="font-heading text-xl font-semibold text-[#6B5B5B] mt-4">
+                <h3 className="font-heading text-xl font-semibold text-[#4A4A4A] mt-4">
                   {item.title}
                 </h3>
-                <p className="text-[#6B5B5B]/70 mt-2">{item.description}</p>
+                <p className="text-[#4A4A4A]/70 mt-2">{item.description}</p>
               </div>
             ))}
           </div>
@@ -132,7 +132,7 @@ export default function About() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-br from-[#FF6B6B] to-[#E07A5F]">
+      <section className="py-20 bg-gradient-to-br from-[#F8A5B8] to-[#E8899C]">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="font-heading text-3xl sm:text-4xl font-bold text-white">
             Let's Connect!
@@ -145,7 +145,7 @@ export default function About() {
               <Button
                 variant="secondary"
                 size="lg"
-                className="bg-white text-[#FF6B6B] hover:bg-[#FFF9E6]"
+                className="bg-white text-[#F8A5B8] hover:bg-[#FFF5F7]"
               >
                 Get in Touch
               </Button>

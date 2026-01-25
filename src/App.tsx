@@ -5,6 +5,10 @@ import Map from './pages/Map';
 import PlaceDetail from './pages/PlaceDetail';
 import About from './pages/About';
 import Contact from './pages/Contact';
+import CoffeeMap from './pages/CoffeeMap';
+import Events from './pages/Events';
+import Vlog from './pages/Vlog';
+import MediaKit from './pages/MediaKit';
 
 function App() {
   return (
@@ -14,9 +18,13 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/events" element={<Events />} />
+          <Route path="/vlog" element={<Vlog />} />
+          <Route path="/media-kit" element={<MediaKit />} />
         </Route>
         <Route element={<Layout hideFooter />}>
           <Route path="/map" element={<Map />} />
+          <Route path="/coffee" element={<CoffeeMap />} />
         </Route>
         <Route path="/place/:id" element={<PlaceDetail />} />
       </Routes>
