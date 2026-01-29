@@ -1,7 +1,7 @@
 // Simple admin interface for Chloe to trigger enrichment
 
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { fetchAllPlacesForAdmin, fetchPendingEnrichment } from './lib/notion-server';
+import { fetchAllPlacesForAdmin, fetchPendingEnrichment } from './lib/notion-server.js';
 
 export default async function handler(
   req: VercelRequest,

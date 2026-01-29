@@ -2,12 +2,12 @@
 
 import { Client } from '@notionhq/client';
 
-function getNotionClient(): Client {
+function getNotionClient() {
   const auth = process.env.NOTION_API_KEY;
   if (!auth) {
     throw new Error('NOTION_API_KEY environment variable is not set');
   }
-  return new Client({ auth });
+  return new Client({ auth }) as any;
 }
 
 function getDatabaseId(): string {

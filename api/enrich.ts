@@ -1,14 +1,14 @@
 // Main enrichment endpoint - fetches restaurant data and updates Notion
 
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { searchPlace, getPlaceDetails, getPlacePhoto } from './lib/google-places';
-import { searchBusiness, getBusinessDetails, downloadYelpImage, formatYelpHours } from './lib/yelp';
-import { uploadImage, generateFilename } from './lib/storage';
+import { searchPlace, getPlaceDetails, getPlacePhoto } from './lib/google-places.js';
+import { searchBusiness, getBusinessDetails, downloadYelpImage, formatYelpHours } from './lib/yelp.js';
+import { uploadImage, generateFilename } from './lib/storage.js';
 import {
   fetchPageForEnrichment,
   updatePageWithEnrichment,
   type EnrichmentData,
-} from './lib/notion-server';
+} from './lib/notion-server.js';
 
 interface EnrichRequest {
   pageId: string;
