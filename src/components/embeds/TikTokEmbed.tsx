@@ -53,11 +53,25 @@ function reprocessEmbeds() {
   }
 }
 
+// Fetch with timeout helper
+async function fetchWithTimeout(url: string, timeout = 5000): Promise<Response> {
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), timeout);
+  try {
+    const response = await fetch(url, { signal: controller.signal });
+    clearTimeout(id);
+    return response;
+  } catch (error) {
+    clearTimeout(id);
+    throw error;
+  }
+}
+
 // Fetch oEmbed data - tries our API first, falls back to direct TikTok API
 async function fetchOEmbedData(url: string): Promise<OEmbedData | null> {
   // Try our server-side API first (works in production and vercel dev)
   try {
-    const response = await fetch(`/api/tiktok-oembed?url=${encodeURIComponent(url)}`);
+    const response = await fetchWithTimeout(`/api/tiktok-oembed?url=${encodeURIComponent(url)}`, 5000);
     if (response.ok) {
       return await response.json();
     }
@@ -69,7 +83,7 @@ async function fetchOEmbedData(url: string): Promise<OEmbedData | null> {
   // TikTok allows CORS for their oEmbed endpoint
   try {
     const oembedUrl = `https://www.tiktok.com/oembed?url=${encodeURIComponent(url)}`;
-    const response = await fetch(oembedUrl);
+    const response = await fetchWithTimeout(oembedUrl, 8000);
     if (response.ok) {
       return await response.json();
     }
