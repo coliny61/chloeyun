@@ -127,7 +127,7 @@ export default function Map() {
           ) : (
             <div className="h-full overflow-y-auto bg-[#FFFBFC] p-4 sm:p-6">
               {loading ? (
-                <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-4">
+                <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-4 justify-items-center">
                   {[...Array(6)].map((_, i) => (
                     <LoadingCard key={i} />
                   ))}
@@ -138,7 +138,7 @@ export default function Map() {
                   <p className="text-[#4A4A4A]/70 mt-2">Try adjusting your search criteria</p>
                 </div>
               ) : (
-                <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-4">
+                <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-4 justify-items-center">
                   {sortedPlaces.map((place) => (
                     <PlaceCard key={place.id} place={place} />
                   ))}

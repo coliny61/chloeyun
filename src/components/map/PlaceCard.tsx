@@ -59,7 +59,7 @@ export default function PlaceCard({ place, compact = false }: PlaceCardProps) {
   return (
     <Link
       to={`/place/${place.id}`}
-      className="block bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden group"
+      className="block bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden group w-full max-w-sm"
     >
       <div className="relative h-44 sm:h-48 overflow-hidden">
         <img

@@ -68,11 +68,11 @@ export default function Events() {
               <p className="text-[#4A4A4A]/70">Check back soon for exciting events and collaborations!</p>
             </div>
           ) : (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8" key={animationKey}>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 justify-items-center" key={animationKey}>
               {events.map((event, index) => (
                 <div
                   key={event.id}
-                  className={`bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col ${
+                  className={`bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col w-full max-w-sm ${
                     isGridVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
                   }`}
                   style={{

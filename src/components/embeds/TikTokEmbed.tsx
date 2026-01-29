@@ -98,7 +98,7 @@ export default function TikTokEmbed({ url }: TikTokEmbedProps) {
   const [loading, setLoading] = useState(true);
   const [embedData, setEmbedData] = useState<OEmbedData | null>(null);
   const [error, setError] = useState(false);
-  const [isPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [embedReady, setEmbedReady] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -135,8 +135,7 @@ export default function TikTokEmbed({ url }: TikTokEmbedProps) {
   }, [isPlaying, embedData]);
 
   const handlePlay = () => {
-    // Open TikTok directly - most reliable across all devices
-    window.open(url, '_blank', 'noopener,noreferrer');
+    setIsPlaying(true);
   };
 
   if (!url) {
