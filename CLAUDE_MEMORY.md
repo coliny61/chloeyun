@@ -4,6 +4,10 @@
 
 ## Project Status: AI Enrichment Workflow Added
 
+### Live Site
+- **Production URL:** https://chloeeatsdfw.com
+- **Vercel URL:** https://chloe-yun-website.vercel.app
+
 ### GitHub Repository
 - **URL:** https://github.com/coliny61/chloeyun
 - **Remote:** git@github.com:coliny61/chloeyun.git (SSH)
