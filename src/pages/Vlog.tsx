@@ -138,7 +138,7 @@ export default function Vlog() {
               <p className="text-[#4A4A4A]/70">Check back soon for new vlog content!</p>
             </div>
           ) : (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 justify-items-center" key={animationKey}>
+            <div className="flex flex-wrap justify-center gap-6 lg:gap-8" key={animationKey}>
               {filteredVlogs.map((vlog) => (
                 <div
                   key={vlog.id}

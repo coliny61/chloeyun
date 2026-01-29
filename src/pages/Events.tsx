@@ -68,7 +68,7 @@ export default function Events() {
               <p className="text-[#4A4A4A]/70">Check back soon for exciting events and collaborations!</p>
             </div>
           ) : (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 justify-items-center" key={animationKey}>
+            <div className="flex flex-wrap justify-center gap-6 lg:gap-8" key={animationKey}>
               {events.map((event) => (
                 <div
                   key={event.id}
