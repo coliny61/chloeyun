@@ -1,8 +1,8 @@
 # Chloe Eats DFW - Project Memory
 
-## Last Updated: January 24, 2025
+## Last Updated: January 28, 2025
 
-## Project Status: Coffee Merged into Food Spots
+## Project Status: AI Enrichment Workflow Added
 
 ### GitHub Repository
 - **URL:** https://github.com/coliny61/chloeyun
@@ -12,14 +12,47 @@
 
 ---
 
-## Recent Changes (This Session)
+## Recent Changes (January 28, 2025)
 
-### Coffee Tab Removal & Merge
+### AI Content Enrichment Workflow
+Added a backend workflow for Chloe to easily add new content without coding:
+
+**How it works:**
+1. Chloe adds a new place in Notion with basic info (name, location, rating, review, TikTok URL)
+2. Sets Status to "Ready to Enrich"
+3. Visits `/api/admin` (password protected)
+4. Clicks "Enrich" button
+5. AI automatically fetches: cover image, address, coordinates, phone, website, hours
+6. Place is published automatically
+
+**New API Routes:**
+- `/api/admin` - Admin dashboard for triggering enrichment
+- `/api/enrich` - Main enrichment endpoint
+
+**New Files Created:**
+- `/api/enrich.ts` - Main enrichment logic
+- `/api/admin.ts` - Admin UI
+- `/api/lib/google-places.ts` - Google Places API client
+- `/api/lib/yelp.ts` - Yelp API client (fallback)
+- `/api/lib/storage.ts` - Vercel Blob storage utilities
+- `/api/lib/notion-server.ts` - Server-side Notion utilities
+
+**New Environment Variables Required:**
+- `NOTION_API_KEY` - Same as VITE version, for server-side
+- `NOTION_DATABASE_ID` - Same as VITE version, for server-side
+- `GOOGLE_PLACES_API_KEY` - Enable Places API in Google Cloud
+- `YELP_API_KEY` - From Yelp Fusion developer portal
+- `BLOB_READ_WRITE_TOKEN` - From Vercel Blob storage
+- `ADMIN_SECRET` - Password for admin page
+
+**Notion Database Fields Needed:**
+- `Location` (text) - City/neighborhood for search
+- `Status` (select) - "Draft", "Ready to Enrich", "Published"
+
+### Previous: Coffee Tab Removal & Merge
 - **Removed:** Coffee tab from navigation
-- **Removed:** `/coffee` route and `CoffeeMap.tsx` page
 - **Merged:** 6 coffee shops into `mockPlaces` with `cuisineType: 'Coffee'`
 - **Added:** `dateReviewed` field to Place interface for sorting
-- **Default Sort:** Food spots now sorted by most recently reviewed (oldest first, newest last)
 
 ---
 
@@ -131,6 +164,14 @@ Located in `/src/lib/mockData.ts` → `mockVlogPosts[]`
 - `/src/pages/Map.tsx` - Food spots page with sorting
 - `/src/components/layout/Navigation.tsx` - Site navigation
 
+### API Files (Enrichment Workflow)
+- `/api/enrich.ts` - Main enrichment endpoint
+- `/api/admin.ts` - Admin dashboard UI
+- `/api/lib/google-places.ts` - Google Places API client
+- `/api/lib/yelp.ts` - Yelp Fusion API client
+- `/api/lib/storage.ts` - Vercel Blob utilities
+- `/api/lib/notion-server.ts` - Server-side Notion utilities
+
 ---
 
 ## Git Workflow
@@ -150,11 +191,43 @@ git push origin main
 
 ---
 
+---
+
+## 🚨 TABLED / REMIND ME LATER
+
+### SMS AI Chatbot (Text-to-Upload) - NOT SET UP YET
+
+**Status:** Code is ready, needs account setup
+
+Chloe can text a phone number to add content to her website.
+
+**Chloe's phone:** `+12146209319` (already configured)
+
+**To finish setup:**
+1. Create Twilio account → https://www.twilio.com/try-twilio
+2. Buy a phone number (~$1/month)
+3. Create Anthropic account → https://console.anthropic.com/
+4. Get API key (starts with `sk-ant-...`)
+5. Add to Vercel env variables:
+   - `ANTHROPIC_API_KEY`
+   - `ALLOWED_PHONE_NUMBERS=+12146209319`
+6. In Twilio, set webhook to: `https://chloeyun.vercel.app/api/sms-webhook`
+
+**API Route:** `/api/sms-webhook` (already created)
+
+---
+
 ## TODO / Next Steps
-- [ ] Verify all coordinates for new food spots
-- [ ] Add cover images for new places (currently using Unsplash placeholders)
+
+### Setup Required for Enrichment Workflow
+- [ ] Enable Google Places API in Google Cloud Console (same project as Maps)
+- [ ] Create Yelp Fusion API account and get API key
+- [ ] Create Vercel Blob store and get token
+- [ ] Add environment variables to Vercel dashboard
+- [ ] Add "Location" and "Status" fields to Notion database
+- [ ] Test enrichment workflow with a sample place
+
+### Existing TODOs
 - [ ] Test animation performance on mobile
 - [ ] Verify reduced-motion accessibility
 - [ ] Consider code-splitting for bundle optimization
-- [ ] Add more detailed review content for new spots
-- [ ] Update dateReviewed values to match actual TikTok upload dates

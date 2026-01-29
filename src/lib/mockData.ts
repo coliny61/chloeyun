@@ -776,10 +776,10 @@ export const mockVlogPosts: VlogPost[] = [
   },
   {
     id: '6',
-    title: 'New York Trip Part 3',
-    description: 'Even more NYC adventures!',
+    title: 'My First NYC TikTok',
+    description: 'Where it all started - my very first New York adventure!',
     tikTokUrl: 'https://www.tiktok.com/t/ZP8fqqkqq/',
-    date: '2025-10-03',
+    date: '2022-06-01',
     city: 'NYC',
   },
   {

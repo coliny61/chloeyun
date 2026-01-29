@@ -63,7 +63,7 @@ export const CardImage = ({ src, alt, className = '', overlay = false }: CardIma
     <img
       src={src}
       alt={alt}
-      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+      className="w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
       loading="lazy"
     />
     {overlay && (

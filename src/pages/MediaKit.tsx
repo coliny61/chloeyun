@@ -148,22 +148,40 @@ export default function MediaKit() {
         <div className="absolute top-0 right-0 w-96 h-96 bg-[#F8A5B8]/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
         <div className="absolute bottom-0 left-0 w-64 h-64 bg-white/30 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
 
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-          <h1
-            className={`font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-[#4A4A4A] transition-all duration-700 ${
-              isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-            }`}
-          >
-            Media Kit
-          </h1>
-          <p
-            className={`mt-6 text-xl text-[#4A4A4A]/80 max-w-2xl mx-auto transition-all duration-700 ${
-              isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-            }`}
-            style={{ transitionDelay: '150ms' }}
-          >
-            Let's create something amazing together. Here's everything you need to know about partnering with Chloe Eats DFW.
-          </p>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div className="text-center lg:text-left">
+              <h1
+                className={`font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-[#4A4A4A] transition-all duration-700 ${
+                  isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+                }`}
+              >
+                Media Kit
+              </h1>
+              <p
+                className={`mt-6 text-xl text-[#4A4A4A]/80 transition-all duration-700 ${
+                  isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+                }`}
+                style={{ transitionDelay: '150ms' }}
+              >
+                Let's create something amazing together. Here's everything you need to know about partnering with Chloe Eats DFW.
+              </p>
+            </div>
+            <div
+              className={`flex justify-center lg:justify-end transition-all duration-700 ${
+                isLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'
+              }`}
+              style={{ transitionDelay: '300ms' }}
+            >
+              <div className="w-64 h-80 rounded-2xl shadow-2xl overflow-hidden">
+                <img
+                  src="/images/chloe/portrait-elegant.jpg"
+                  alt="Chloe Yun"
+                  className="w-full h-full object-cover object-[center_15%] scale-110"
+                />
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -329,7 +347,7 @@ export default function MediaKit() {
             <Link to="/contact">
               <Button
                 size="lg"
-                className="bg-white text-[#F8A5B8] hover:bg-[#FFF5F7] hover:shadow-xl group"
+                className="bg-[#4A4A4A] text-white hover:bg-[#3a3a3a] hover:shadow-xl shadow-lg group"
               >
                 <span>Get in Touch</span>
                 <svg

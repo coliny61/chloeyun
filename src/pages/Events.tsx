@@ -68,44 +68,39 @@ export default function Events() {
               <p className="text-[#4A4A4A]/70">Check back soon for exciting events and collaborations!</p>
             </div>
           ) : (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8" key={animationKey}>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8" key={animationKey}>
               {events.map((event, index) => (
                 <div
                   key={event.id}
-                  className={`bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300 ${
+                  className={`bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col ${
                     isGridVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
                   }`}
                   style={{
                     transitionDelay: prefersReducedMotion ? '0ms' : `${index * 100}ms`,
                   }}
                 >
-                  <div className="p-6">
-                    <div className="flex items-center gap-2 mb-3">
+                  {/* TikTok thumbnail first for visual hierarchy */}
+                  {event.tikTokUrl && (
+                    <div className="flex-shrink-0">
+                      <TikTokEmbed url={event.tikTokUrl} />
+                    </div>
+                  )}
+                  {/* Content section */}
+                  <div className="p-5 sm:p-6 flex-1 flex flex-col">
+                    <div className="mb-3">
                       <span className="bg-[#F8A5B8]/10 text-[#F8A5B8] px-3 py-1 rounded-full text-xs font-medium">
                         Event
                       </span>
-                      <span className="text-xs text-[#4A4A4A]/50">
-                        {new Date(event.date).toLocaleDateString('en-US', {
-                          year: 'numeric',
-                          month: 'short',
-                          day: 'numeric',
-                        })}
-                      </span>
                     </div>
-                    <h3 className="font-heading text-xl font-semibold text-[#4A4A4A] mb-2">
+                    <h3 className="font-heading text-lg sm:text-xl font-semibold text-[#4A4A4A] mb-2 line-clamp-2">
                       {event.title}
                     </h3>
                     {event.description && (
-                      <p className="text-[#4A4A4A]/70 text-sm line-clamp-2">
+                      <p className="text-[#4A4A4A]/70 text-sm line-clamp-2 mt-auto">
                         {event.description}
                       </p>
                     )}
                   </div>
-                  {event.tikTokUrl && (
-                    <div className="border-t border-[#FFF5F7]">
-                      <TikTokEmbed url={event.tikTokUrl} />
-                    </div>
-                  )}
                 </div>
               ))}
             </div>

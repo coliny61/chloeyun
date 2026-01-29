@@ -38,9 +38,9 @@ export default function About() {
             </div>
             <div className="order-1 lg:order-2 relative">
               <img
-                src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600"
+                src="/images/chloe/eating-casual.jpg"
                 alt="Chloe Yun"
-                className="rounded-3xl shadow-2xl w-full object-cover aspect-[4/5]"
+                className="rounded-3xl shadow-2xl w-full object-cover object-top aspect-[4/5]"
               />
               <div className="absolute -bottom-6 -left-6 bg-white rounded-2xl shadow-xl p-4">
                 <p className="font-heading text-2xl font-bold text-[#F8A5B8]">DFW</p>
@@ -56,26 +56,46 @@ export default function About() {
 
       {/* My Story Section */}
       <section className="py-20 bg-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="font-heading text-3xl sm:text-4xl font-bold text-[#4A4A4A] text-center">
             My Food Journey
           </h2>
-          <div className="mt-12 prose prose-lg max-w-none text-[#4A4A4A]/80">
-            <p>
-              Growing up in a Korean-American household, food was always at the center of everything.
-              From helping my grandmother make kimchi to exploring the diverse food scene of DFW,
-              I've been obsessed with culinary experiences for as long as I can remember.
-            </p>
-            <p className="mt-4">
-              What started as sharing food photos with friends on Instagram quickly grew into something
-              bigger. My honest reviews and genuine enthusiasm for discovering hidden gems resonated
-              with people, and before I knew it, I had built an incredible community of fellow foodies!
-            </p>
-            <p className="mt-4">
-              Now, I spend my days hunting down the best bites, creating content that makes you hungry,
-              and building this platform to make it easier for everyone to find amazing food. Whether
-              you're craving Korean BBQ, the perfect slice of pizza, or a cozy brunch spot, I've got you covered.
-            </p>
+          <div className="mt-12 grid lg:grid-cols-2 gap-12 items-center">
+            <div className="prose prose-lg max-w-none text-[#4A4A4A]/80">
+              <p>
+                Growing up in a Korean-American household, food was always at the center of everything.
+                From helping my grandmother make kimchi to exploring the diverse food scene of DFW,
+                I've been obsessed with culinary experiences for as long as I can remember.
+              </p>
+              <p className="mt-4">
+                What started as sharing food photos with friends on Instagram quickly grew into something
+                bigger. My honest reviews and genuine enthusiasm for discovering hidden gems resonated
+                with people, and before I knew it, I had built an incredible community of fellow foodies!
+              </p>
+              <p className="mt-4">
+                Now, I spend my days hunting down the best bites, creating content that makes you hungry,
+                and building this platform to make it easier for everyone to find amazing food. Whether
+                you're craving Korean BBQ, the perfect slice of pizza, or a cozy brunch spot, I've got you covered.
+              </p>
+            </div>
+            {/* Photo Gallery - All vertical images */}
+            <div className="grid grid-cols-3 gap-4">
+              <img
+                src="/images/chloe/portrait-elegant.jpg"
+                alt="Chloe at an elegant dinner"
+                className="rounded-2xl shadow-lg w-full aspect-[3/4] object-cover object-top"
+              />
+              <img
+                src="/images/chloe/pizza-happiness.jpg"
+                alt="Chloe excited about pizza"
+                className="rounded-2xl shadow-lg w-full aspect-[3/4] object-cover object-top"
+              />
+              <img
+                src="/images/chloe/content-creator.jpg"
+                alt="Chloe creating content"
+                className="rounded-2xl shadow-lg w-full aspect-[3/4] object-cover object-top"
+              />
+            </div>
           </div>
         </div>
       </section>
@@ -145,7 +165,7 @@ export default function About() {
               <Button
                 variant="secondary"
                 size="lg"
-                className="bg-white text-[#F8A5B8] hover:bg-[#FFF5F7]"
+                className="bg-white text-[#d4758a] hover:bg-[#FFF5F7] hover:text-[#c4657a] shadow-lg"
               >
                 Get in Touch
               </Button>

@@ -169,7 +169,7 @@ export default function Home() {
               <Button
                 variant="secondary"
                 size="lg"
-                className="bg-white text-[#F8A5B8] hover:bg-[#FFF5F7] hover:shadow-xl group"
+                className="bg-white text-[#d4758a] hover:bg-[#FFF5F7] hover:text-[#c4657a] hover:shadow-xl shadow-lg group"
               >
                 <span>Get in Touch</span>
                 <svg

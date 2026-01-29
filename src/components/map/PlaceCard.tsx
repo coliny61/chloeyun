@@ -18,7 +18,8 @@ export default function PlaceCard({ place, compact = false }: PlaceCardProps) {
           <img
             src={place.coverImage}
             alt={place.name}
-            className="w-20 h-20 rounded-lg object-cover flex-shrink-0"
+            className="w-20 h-20 rounded-lg object-cover object-center flex-shrink-0"
+            loading="lazy"
           />
           <div className="flex-1 min-w-0">
             <h3 className="font-heading font-semibold text-[#4A4A4A] truncate">
@@ -58,16 +59,19 @@ export default function PlaceCard({ place, compact = false }: PlaceCardProps) {
   return (
     <Link
       to={`/place/${place.id}`}
-      className="block bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-200 overflow-hidden group"
+      className="block bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden group"
     >
-      <div className="relative h-40">
+      <div className="relative h-44 sm:h-48 overflow-hidden">
         <img
           src={place.coverImage}
           alt={place.name}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
+          loading="lazy"
         />
+        {/* Subtle gradient for better badge visibility */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         <div className="absolute top-3 right-3">
-          <Badge variant="price" className="bg-white/90 backdrop-blur-sm">
+          <Badge variant="price" className="bg-white/90 backdrop-blur-sm shadow-sm">
             {place.priceRange}
           </Badge>
         </div>

@@ -61,11 +61,11 @@ export default function PlaceDetail() {
   return (
     <div className="min-h-screen bg-[#FFFBFC]">
       {/* Hero Image */}
-      <div className="relative h-[40vh] sm:h-[50vh]">
+      <div className="relative h-[40vh] sm:h-[50vh] overflow-hidden">
         <img
           src={place.coverImage}
           alt={place.name}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover object-center"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
 

@@ -159,9 +159,9 @@ export default function Hero() {
           >
             <div className="relative z-10">
               <img
-                src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800"
-                alt="Delicious food spread"
-                className="rounded-3xl shadow-2xl w-full object-cover aspect-[4/5] hover:shadow-3xl transition-shadow duration-500"
+                src="/images/chloe/pizza-happiness.jpg"
+                alt="Chloe with pizza - happiness"
+                className="rounded-3xl shadow-2xl w-full object-cover object-top aspect-[4/5] hover:shadow-3xl transition-shadow duration-500"
               />
 
               {/* Floating card with animation */}
