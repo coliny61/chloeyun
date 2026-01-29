@@ -1,8 +1,8 @@
 # Chloe Eats DFW - Project Memory
 
-## Last Updated: January 28, 2025
+## Last Updated: January 29, 2025
 
-## Project Status: AI Enrichment Workflow Added
+## Project Status: UX Polish & Free Map Integration
 
 ### Live Site
 - **Production URL:** https://chloeeatsdfw.com
@@ -16,9 +16,79 @@
 
 ---
 
-## Recent Changes (January 28, 2025)
+## Recent Changes (January 29, 2025)
 
-### AI Content Enrichment Workflow
+### Map: Switched to Free Leaflet + OpenStreetMap
+**Replaced Google Maps** (which required paid API key) with **Leaflet + OpenStreetMap** (completely free)
+
+**Files Changed:**
+- `/src/components/map/FoodMap.tsx` - Complete rewrite using react-leaflet
+- `/src/index.css` - Added Leaflet CSS import and custom marker styles
+- `package.json` - Added leaflet, react-leaflet, @types/leaflet
+
+**Implementation:**
+```tsx
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+
+<MapContainer center={[32.7767, -96.7970]} zoom={11}>
+  <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+</MapContainer>
+```
+
+### TikTok Embeds: Redirect Instead of Inline Play
+Changed TikTok behavior to show thumbnail preview, then redirect to TikTok when clicked.
+
+**File:** `/src/components/embeds/TikTokEmbed.tsx`
+```tsx
+const handlePlay = () => {
+  window.open(url, '_blank', 'noopener,noreferrer');
+};
+```
+
+### Mobile Visibility Fix: Events & Vlogs Pages
+Fixed cards not appearing on mobile due to scroll animation issues.
+
+**Files:** `/src/pages/Events.tsx`, `/src/pages/Vlog.tsx`
+- Removed scroll animation conditional classes that kept opacity at 0
+- Changed grid to flex for better centering: `flex flex-wrap justify-center gap-6`
+
+### Card Centering: All TikTok/Instagram Cards
+All card layouts now use flex centering instead of grid.
+```tsx
+<div className="flex flex-wrap justify-center gap-6 lg:gap-8">
+  {items.map(item => <div className="w-full max-w-sm">...</div>)}
+</div>
+```
+
+### Removed: Featured Video Reviews from Home Page
+- Deleted `FeaturedVideos` component from Home.tsx
+- Removed associated wave dividers
+
+### Button Readability Improvements
+Fixed "Get in Touch" buttons throughout the site:
+- MediaKit.tsx: Changed to dark gray button with white text
+- Home.tsx CTA section: Improved contrast
+
+**Example fix:**
+```tsx
+className="bg-[#4A4A4A] text-white hover:bg-[#3a3a3a] hover:shadow-xl shadow-lg"
+```
+
+### Image Formatting: Portrait Cropping
+Fixed portrait images cutting off faces:
+- About.tsx and MediaKit.tsx: Changed `object-center` to `object-top`
+- Ensures faces are preserved in portrait images
+
+### Content Updates
+- Fixed vlog title: "New York Trip Part 3" → "My First NYC TikTok"
+- Removed dates from vlog/event cards
+
+---
+
+## Previous Changes (January 28, 2025)
+
+### AI Content Enrichment Workflow (Previous Session)
 Added a backend workflow for Chloe to easily add new content without coding:
 
 **How it works:**
@@ -129,7 +199,7 @@ Located in `/src/lib/mockData.ts` → `mockVlogPosts[]`
 | 3 | New York Trip Part 2 | NYC |
 | 4 | Dominican Republic Trip | Dominican Republic |
 | 5 | San Diego Trip | San Diego |
-| 6 | New York Trip Part 3 | NYC |
+| 6 | My First NYC TikTok | NYC |
 | 7 | Dallas Vlog | DFW |
 | 8 | Sunday Funday Vlog | DFW |
 | 9 | Day Off Vlog | DFW |
@@ -165,8 +235,17 @@ Located in `/src/lib/mockData.ts` → `mockVlogPosts[]`
 - `/src/types/index.ts` - TypeScript types and category mappings
 - `/src/hooks/usePlaces.ts` - Filter logic
 - `/src/components/map/FilterSidebar.tsx` - Filter UI
+- `/src/components/map/FoodMap.tsx` - Leaflet + OpenStreetMap integration
+- `/src/components/embeds/TikTokEmbed.tsx` - TikTok thumbnail previews with redirect
 - `/src/pages/Map.tsx` - Food spots page with sorting
+- `/src/pages/Events.tsx` - Events grid with centered cards
+- `/src/pages/Vlog.tsx` - Vlog grid with city filters
 - `/src/components/layout/Navigation.tsx` - Site navigation
+
+### New Dependencies (January 29)
+- `leaflet` - Map library
+- `react-leaflet` - React wrapper for Leaflet
+- `@types/leaflet` - TypeScript types
 
 ### API Files (Enrichment Workflow)
 - `/api/enrich.ts` - Main enrichment endpoint
@@ -223,8 +302,17 @@ Chloe can text a phone number to add content to her website.
 
 ## TODO / Next Steps
 
+### Completed (January 29)
+- [x] Replace Google Maps with free alternative (Leaflet + OpenStreetMap)
+- [x] Fix mobile visibility issues on Events/Vlogs pages
+- [x] Center all TikTok/Instagram cards
+- [x] Fix portrait image cropping (preserve faces)
+- [x] Improve button readability throughout site
+- [x] Remove Featured Video Reviews from home page
+- [x] Fix TikTok embed behavior (thumbnail + redirect)
+
 ### Setup Required for Enrichment Workflow
-- [ ] Enable Google Places API in Google Cloud Console (same project as Maps)
+- [ ] Enable Google Places API in Google Cloud Console
 - [ ] Create Yelp Fusion API account and get API key
 - [ ] Create Vercel Blob store and get token
 - [ ] Add environment variables to Vercel dashboard
