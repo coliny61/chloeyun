@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom';
 import Hero from '../components/home/Hero';
-import FeaturedVideos from '../components/home/FeaturedVideos';
 import FeaturedSpots from '../components/home/FeaturedSpots';
 import Stats from '../components/home/Stats';
 import Button from '../components/ui/Button';
@@ -22,13 +21,8 @@ export default function Home() {
     <div className="overflow-hidden">
       <Hero />
 
-      {/* Wave divider between Hero and FeaturedVideos */}
+      {/* Wave divider between Hero and FeaturedSpots */}
       <WaveDivider fillColor="#FFFFFF" height={60} />
-
-      <FeaturedVideos />
-
-      {/* Curve divider between Videos and FeaturedSpots */}
-      <CurveDivider fillColor="#FFFFFF" height={50} />
 
       <FeaturedSpots />
 
