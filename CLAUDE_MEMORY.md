@@ -1,8 +1,8 @@
 # Chloe Eats DFW - Project Memory
 
-## Last Updated: January 29, 2025
+## Last Updated: February 20, 2026
 
-## Project Status: UX Polish & Free Map Integration
+## Project Status: Post-Cleanup — Lean Active Codebase
 
 ### Live Site
 - **Production URL:** https://chloeeatsdfw.com
@@ -13,6 +13,38 @@
 - **Remote:** git@github.com:coliny61/chloeyun.git (SSH)
 - **Branch:** main
 - **Status:** Up to date with origin/main
+
+---
+
+## Architecture Cleanup (February 20, 2026)
+
+Deleted **69 dead files** (~12,000+ LOC) from the project root that were remnants of an older single-page version of the app. None were imported by anything in `src/`.
+
+**What was deleted:**
+- 15 old root-level components (App.tsx, Hero.tsx, About.tsx, Blog.tsx, etc.) — used Framer Motion, Lucide
+- 6 old data files (food-reviews.ts, events.ts, videos.ts, etc.)
+- 3 old entry/style files (main.tsx, globals.css, index.css — 3,157 lines)
+- 44 unused ShadCN UI components at root level (accordion.tsx through tooltip.tsx)
+- 1 dead `src/` component: `src/components/home/FeaturedVideos.tsx` (zero imports)
+- `dist/` stale build directory (~9.9MB)
+- `Guidelines.md` (boilerplate template, not project-specific)
+
+**Build verified clean** — `npm run build` succeeds with zero broken imports.
+
+### Current Project Root (Post-Cleanup)
+```
+api/               — Vercel serverless functions
+src/               — Active React app (React 19 + Router + Tailwind 4 + Leaflet)
+public/            — Static assets
+index.html         — Vite entry point
+package.json       — Dependencies
+vite.config.ts     — Vite config
+tsconfig*.json     — TypeScript configs
+eslint.config.js   — ESLint config
+vercel.json        — Vercel deployment config
+CLAUDE_MEMORY.md   — This file
+README.md          — Project readme
+```
 
 ---
 
@@ -302,7 +334,13 @@ Chloe can text a phone number to add content to her website.
 
 ## TODO / Next Steps
 
-### Completed (January 29)
+### Completed (February 20, 2026)
+- [x] Architecture cleanup: deleted 69 dead root-level files (~12,000+ LOC)
+- [x] Deleted stale dist/ build directory
+- [x] Deleted dead FeaturedVideos.tsx from src/
+- [x] Updated CLAUDE_MEMORY.md to reflect post-cleanup state
+
+### Completed (January 29, 2025)
 - [x] Replace Google Maps with free alternative (Leaflet + OpenStreetMap)
 - [x] Fix mobile visibility issues on Events/Vlogs pages
 - [x] Center all TikTok/Instagram cards

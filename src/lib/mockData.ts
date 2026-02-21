@@ -1,4 +1,4 @@
-import type { Place, SocialStats, Video, Event, TravelPost, VlogPost } from '../types';
+import type { Place, SocialStats, Event, VlogPost } from '../types';
 
 export const mockPlaces: Place[] = [
   {
@@ -633,8 +633,6 @@ export const mockPlaces: Place[] = [
   },
 ];
 
-export const mockVideos: Video[] = [];
-
 export const mockEvents: Event[] = [
   {
     id: '1',
@@ -719,17 +717,6 @@ export const mockEvents: Event[] = [
     description: "Galentine's celebration at my apartment!",
     tikTokUrl: 'https://www.tiktok.com/t/ZP8fqUbEb/',
     date: '2025-02-13',
-  },
-];
-
-export const mockTravelPosts: TravelPost[] = [
-  {
-    id: '1',
-    title: 'New York Trip',
-    location: 'New York City',
-    description: 'Fall adventures in NYC!',
-    tikTokUrl: 'https://www.tiktok.com/t/ZP8fqudo9/',
-    date: '2025-10-01',
   },
 ];
 
@@ -857,16 +844,8 @@ export function getMockFeaturedPlaces(): Place[] {
   return mockPlaces.filter(place => place.featured);
 }
 
-export function getMockVideos(): Video[] {
-  return mockVideos;
-}
-
 export function getMockEvents(): Event[] {
   return mockEvents;
-}
-
-export function getMockTravelPosts(): TravelPost[] {
-  return mockTravelPosts;
 }
 
 export function getMockVlogPosts(): VlogPost[] {

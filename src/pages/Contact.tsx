@@ -6,6 +6,8 @@ import { FloatingInput, FloatingTextarea, FloatingSelect } from '../components/u
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
 import { useReducedMotion } from '../hooks/useReducedMotion';
 
+const CONTACT_EMAIL = 'chloe_yun@aol.com';
+
 const INQUIRY_TYPES: InquiryType[] = [
   'Brand Partnership',
   'Restaurant Feature',
@@ -32,9 +34,7 @@ export default function Contact() {
     inquiryType: 'Brand Partnership',
     message: '',
   });
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [formErrors, setFormErrors] = useState<FormErrors>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const [isLoaded, setIsLoaded] = useState(false);
@@ -88,7 +88,7 @@ export default function Contact() {
     return touched[field] && !formErrors[field] && !!formData[field];
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     // Mark all fields as touched
@@ -99,37 +99,21 @@ export default function Contact() {
       return;
     }
 
-    setIsSubmitting(true);
-    setError(null);
+    const subject = encodeURIComponent(`[${formData.inquiryType}] Message from ${formData.name}`);
+    const body = encodeURIComponent(
+      `Name: ${formData.name}\nEmail: ${formData.email}\nCompany: ${formData.company || 'N/A'}\nInquiry Type: ${formData.inquiryType}\n\n${formData.message}`
+    );
+    window.location.href = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`;
 
-    try {
-      // Replace YOUR_FORMSPREE_ID with actual Formspree endpoint
-      const response = await fetch('https://formspree.io/f/YOUR_FORMSPREE_ID', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (response.ok) {
-        setIsSubmitted(true);
-        setFormData({
-          name: '',
-          email: '',
-          company: '',
-          inquiryType: 'Brand Partnership',
-          message: '',
-        });
-        setTouched({});
-      } else {
-        throw new Error('Failed to submit form');
-      }
-    } catch (err) {
-      setError('Something went wrong. Please try again or email directly.');
-    } finally {
-      setIsSubmitting(false);
-    }
+    setIsSubmitted(true);
+    setFormData({
+      name: '',
+      email: '',
+      company: '',
+      inquiryType: 'Brand Partnership',
+      message: '',
+    });
+    setTouched({});
   };
 
   // Calculate form progress
@@ -272,48 +256,21 @@ export default function Contact() {
                     required
                   />
 
-                  {error && (
-                    <p className="text-red-500 text-sm animate-shake">{error}</p>
-                  )}
-
                   <Button
                     type="submit"
-                    disabled={isSubmitting}
                     className="w-full group"
                   >
-                    {isSubmitting ? (
-                      <span className="flex items-center justify-center gap-2">
-                        <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
-                          <circle
-                            className="opacity-25"
-                            cx="12"
-                            cy="12"
-                            r="10"
-                            stroke="currentColor"
-                            strokeWidth="4"
-                            fill="none"
-                          />
-                          <path
-                            className="opacity-75"
-                            fill="currentColor"
-                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                          />
-                        </svg>
-                        Sending...
-                      </span>
-                    ) : (
-                      <span className="flex items-center justify-center gap-2">
-                        Send Message
-                        <svg
-                          className="w-5 h-5 transition-transform group-hover:translate-x-1"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                        </svg>
-                      </span>
-                    )}
+                    <span className="flex items-center justify-center gap-2">
+                      Send Message
+                      <svg
+                        className="w-5 h-5 transition-transform group-hover:translate-x-1"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                      </svg>
+                    </span>
                   </Button>
                 </form>
               )}

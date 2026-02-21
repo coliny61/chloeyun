@@ -24,30 +24,9 @@ export interface Place {
   dateReviewed?: string; // Date the place was reviewed (for sorting by most recent)
 }
 
-export interface Video {
-  id: string;
-  title: string;
-  description?: string;
-  tikTokUrl?: string;
-  instagramUrl?: string;
-  date: string;
-  thumbnail?: string;
-}
-
 export interface Event {
   id: string;
   title: string;
-  description?: string;
-  tikTokUrl?: string;
-  instagramUrl?: string;
-  date: string;
-  thumbnail?: string;
-}
-
-export interface TravelPost {
-  id: string;
-  title: string;
-  location: string;
   description?: string;
   tikTokUrl?: string;
   instagramUrl?: string;
