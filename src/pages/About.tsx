@@ -1,20 +1,27 @@
 import { Link } from 'react-router-dom';
 import Button from '../components/ui/Button';
 import Stats from '../components/home/Stats';
+import { useAboutPhotos } from '../hooks/useSupabase';
+import { usePageMeta } from '../hooks/usePageMeta';
 
 export default function About() {
+  usePageMeta(
+    'About Chloe | Chloe Eats DFW',
+    'Meet Chloe Yun — DFW food content creator sharing the best restaurants, hidden gems, and culinary adventures in Dallas-Fort Worth.'
+  );
+  const { photos } = useAboutPhotos();
   return (
-    <div className="min-h-screen bg-[#FFFBFC]">
+    <div className="min-h-screen bg-[#FAF6F0]">
       {/* Hero Section */}
-      <section className="py-20 bg-gradient-to-br from-[#FFF5F7] via-[#FFFBFC] to-[#FDD5DD]/30">
+      <section className="py-20 bg-gradient-to-br from-[#FFF5F7] via-[#FAF6F0] to-[#FDD5DD]/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="order-2 lg:order-1">
-              <h1 className="font-heading text-4xl sm:text-5xl font-bold text-[#4A4A4A]">
+              <h1 className="font-heading text-4xl sm:text-5xl font-bold text-[#2D2424]">
                 Hey there! I'm
                 <span className="block text-[#F8A5B8]">Chloe Yun</span>
               </h1>
-              <p className="mt-6 text-lg text-[#4A4A4A]/80 leading-relaxed">
+              <p className="mt-6 text-lg text-[#2D2424]/80 leading-relaxed">
                 I'm a food content creator based in Dallas-Fort Worth, on a mission to discover and share
                 the most delicious spots with my amazing community. From hole-in-the-wall gems to
                 trendy new restaurants, I'm always on the hunt for my next great meal!
@@ -44,7 +51,7 @@ export default function About() {
               />
               <div className="absolute -bottom-6 -left-6 bg-white rounded-2xl shadow-xl p-4">
                 <p className="font-heading text-2xl font-bold text-[#F8A5B8]">DFW</p>
-                <p className="text-sm text-[#4A4A4A]">Based & Eating</p>
+                <p className="text-sm text-[#2D2424]">Based & Eating</p>
               </div>
             </div>
           </div>
@@ -57,11 +64,11 @@ export default function About() {
       {/* My Story Section */}
       <section className="py-20 bg-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-3xl sm:text-4xl font-bold text-[#4A4A4A] text-center">
+          <h2 className="font-heading text-3xl sm:text-4xl font-bold text-[#2D2424] text-center">
             My Food Journey
           </h2>
           <div className="mt-12 grid lg:grid-cols-2 gap-12 items-center">
-            <div className="prose prose-lg max-w-none text-[#4A4A4A]/80">
+            <div className="prose prose-lg max-w-none text-[#2D2424]/80">
               <p>
                 Growing up in a Korean-American household, food was always at the center of everything.
                 From helping my grandmother make kimchi to exploring the diverse food scene of DFW,
@@ -80,21 +87,38 @@ export default function About() {
             </div>
             {/* Photo Gallery - All vertical images */}
             <div className="grid grid-cols-3 gap-4">
-              <img
-                src="/images/chloe/portrait-elegant.jpg"
-                alt="Chloe at an elegant dinner"
-                className="rounded-2xl shadow-lg w-full aspect-[3/4] object-cover object-top"
-              />
-              <img
-                src="/images/chloe/pizza-happiness.jpg"
-                alt="Chloe excited about pizza"
-                className="rounded-2xl shadow-lg w-full aspect-[3/4] object-cover object-top"
-              />
-              <img
-                src="/images/chloe/content-creator.jpg"
-                alt="Chloe creating content"
-                className="rounded-2xl shadow-lg w-full aspect-[3/4] object-cover object-top"
-              />
+              {photos.length > 0 ? (
+                photos.slice(0, 3).map((photo) => (
+                  <img
+                    key={photo.id}
+                    src={photo.image_url}
+                    alt="Chloe"
+                    className="rounded-2xl shadow-lg w-full aspect-[3/4] object-cover object-top"
+                    loading="lazy"
+                  />
+                ))
+              ) : (
+                <>
+                  <img
+                    src="/images/chloe/portrait-elegant.jpg"
+                    alt="Chloe at an elegant dinner"
+                    className="rounded-2xl shadow-lg w-full aspect-[3/4] object-cover object-top"
+                    loading="lazy"
+                  />
+                  <img
+                    src="/images/chloe/pizza-happiness.jpg"
+                    alt="Chloe excited about pizza"
+                    className="rounded-2xl shadow-lg w-full aspect-[3/4] object-cover object-top"
+                    loading="lazy"
+                  />
+                  <img
+                    src="/images/chloe/content-creator.jpg"
+                    alt="Chloe creating content"
+                    className="rounded-2xl shadow-lg w-full aspect-[3/4] object-cover object-top"
+                    loading="lazy"
+                  />
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -103,7 +127,7 @@ export default function About() {
       {/* What I Do Section */}
       <section className="py-20 bg-[#FFF5F7]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-3xl sm:text-4xl font-bold text-[#4A4A4A] text-center">
+          <h2 className="font-heading text-3xl sm:text-4xl font-bold text-[#2D2424] text-center">
             What I Do
           </h2>
           <div className="mt-12 grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -141,10 +165,10 @@ export default function About() {
             ].map((item, index) => (
               <div key={index} className="bg-white rounded-2xl p-6 shadow-md">
                 <span className="text-4xl">{item.icon}</span>
-                <h3 className="font-heading text-xl font-semibold text-[#4A4A4A] mt-4">
+                <h3 className="font-heading text-xl font-semibold text-[#2D2424] mt-4">
                   {item.title}
                 </h3>
-                <p className="text-[#4A4A4A]/70 mt-2">{item.description}</p>
+                <p className="text-[#2D2424]/70 mt-2">{item.description}</p>
               </div>
             ))}
           </div>
@@ -152,7 +176,7 @@ export default function About() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-br from-[#F8A5B8] to-[#E8899C]">
+      <section className="py-20 bg-gradient-to-br from-[#F8A5B8] to-[#E8919F]">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="font-heading text-3xl sm:text-4xl font-bold text-white">
             Let's Connect!
@@ -170,7 +194,7 @@ export default function About() {
                 Get in Touch
               </Button>
             </Link>
-            <Link to="/map">
+            <Link to="/food-spots">
               <Button
                 variant="outline"
                 size="lg"

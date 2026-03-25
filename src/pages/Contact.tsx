@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
 import { EnvelopeIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
 import type { ContactFormData, InquiryType } from '../types';
+import { submitContact } from '../hooks/useSupabase';
 import Button from '../components/ui/Button';
 import { FloatingInput, FloatingTextarea, FloatingSelect } from '../components/ui/FloatingInput';
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
 import { useReducedMotion } from '../hooks/useReducedMotion';
+import { usePageMeta } from '../hooks/usePageMeta';
+import { trackEvent } from '../lib/analytics';
 
 const CONTACT_EMAIL = 'chloe_yun@aol.com';
 
@@ -27,6 +30,10 @@ function validateEmail(email: string): boolean {
 }
 
 export default function Contact() {
+  usePageMeta(
+    'Contact | Chloe Eats DFW',
+    'Get in touch with Chloe for partnerships, restaurant features, event coverage, or general inquiries.'
+  );
   const [formData, setFormData] = useState<ContactFormData>({
     name: '',
     email: '',
@@ -47,6 +54,7 @@ export default function Contact() {
 
   useEffect(() => {
     if (prefersReducedMotion) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsLoaded(true);
       return;
     }
@@ -70,6 +78,7 @@ export default function Contact() {
     if (touched.message && !formData.message.trim()) {
       errors.message = 'Message is required';
     }
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setFormErrors(errors);
   }, [formData, touched]);
 
@@ -88,7 +97,8 @@ export default function Contact() {
     return touched[field] && !formErrors[field] && !!formData[field];
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     // Mark all fields as touched
@@ -99,12 +109,24 @@ export default function Contact() {
       return;
     }
 
+    setIsSubmitting(true);
+
+    // Save to Supabase
+    try {
+      await submitContact(formData);
+    } catch {
+      // Supabase save failed — still send mailto as fallback
+    }
+
+    // Also open mailto for email notification
     const subject = encodeURIComponent(`[${formData.inquiryType}] Message from ${formData.name}`);
     const body = encodeURIComponent(
       `Name: ${formData.name}\nEmail: ${formData.email}\nCompany: ${formData.company || 'N/A'}\nInquiry Type: ${formData.inquiryType}\n\n${formData.message}`
     );
     window.location.href = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`;
 
+    trackEvent('submit', 'Contact Form', formData.inquiryType);
+    setIsSubmitting(false);
     setIsSubmitted(true);
     setFormData({
       name: '',
@@ -121,23 +143,23 @@ export default function Contact() {
   const progress = (filledFields / 3) * 100;
 
   return (
-    <div className="min-h-screen bg-[#FFFBFC]">
+    <div className="min-h-screen bg-[#FAF6F0]">
       {/* Header */}
-      <section className="py-16 bg-gradient-to-br from-[#FFF5F7] via-[#FFFBFC] to-[#FDD5DD]/30 relative overflow-hidden">
+      <section className="py-16 bg-gradient-to-br from-[#FFF5F7] via-[#FAF6F0] to-[#FDD5DD]/30 relative overflow-hidden">
         {/* Decorative elements */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-[#F8A5B8]/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
         <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#FDD5DD]/20 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
 
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           <h1
-            className={`font-heading text-4xl sm:text-5xl font-bold text-[#4A4A4A] transition-all duration-700 ${
+            className={`font-heading text-4xl sm:text-5xl font-bold text-[#2D2424] transition-all duration-700 ${
               isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             }`}
           >
             Let's Work Together
           </h1>
           <p
-            className={`mt-6 text-lg text-[#4A4A4A]/80 max-w-2xl mx-auto transition-all duration-700 ${
+            className={`mt-6 text-lg text-[#2D2424]/80 max-w-2xl mx-auto transition-all duration-700 ${
               isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             }`}
             style={{ transitionDelay: '150ms' }}
@@ -159,7 +181,7 @@ export default function Contact() {
               }`}
             >
               <div className="flex items-center justify-between mb-6">
-                <h2 className="font-heading text-2xl font-semibold text-[#4A4A4A]">
+                <h2 className="font-heading text-2xl font-semibold text-[#2D2424]">
                   Send Me a Message
                 </h2>
                 {/* Progress indicator */}
@@ -167,11 +189,11 @@ export default function Contact() {
                   <div className="flex items-center gap-2">
                     <div className="w-24 h-2 bg-[#FFF5F7] rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-gradient-to-r from-[#F8A5B8] to-[#E8899C] rounded-full transition-all duration-500"
+                        className="h-full bg-gradient-to-r from-[#F8A5B8] to-[#E8919F] rounded-full transition-all duration-500"
                         style={{ width: `${progress}%` }}
                       />
                     </div>
-                    <span className="text-xs text-[#4A4A4A]/60">{Math.round(progress)}%</span>
+                    <span className="text-xs text-[#2D2424]/60">{Math.round(progress)}%</span>
                   </div>
                 )}
               </div>
@@ -181,10 +203,10 @@ export default function Contact() {
                   <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto animate-bounce-in">
                     <CheckCircleIcon className="w-12 h-12 text-green-500" />
                   </div>
-                  <h3 className="font-heading text-xl font-semibold text-[#4A4A4A] mt-6">
+                  <h3 className="font-heading text-xl font-semibold text-[#2D2424] mt-6">
                     Message Sent!
                   </h3>
-                  <p className="text-[#4A4A4A]/70 mt-2">
+                  <p className="text-[#2D2424]/70 mt-2">
                     Thanks for reaching out! I'll get back to you soon.
                   </p>
                   <Button
@@ -259,9 +281,10 @@ export default function Contact() {
                   <Button
                     type="submit"
                     className="w-full group"
+                    disabled={isSubmitting}
                   >
                     <span className="flex items-center justify-center gap-2">
-                      Send Message
+                      {isSubmitting ? 'Sending...' : 'Send Message'}
                       <svg
                         className="w-5 h-5 transition-transform group-hover:translate-x-1"
                         fill="none"
@@ -285,7 +308,7 @@ export default function Contact() {
                 }`}
                 style={{ transitionDelay: '150ms' }}
               >
-                <h2 className="font-heading text-2xl font-semibold text-[#4A4A4A] mb-6">
+                <h2 className="font-heading text-2xl font-semibold text-[#2D2424] mb-6">
                   Partnership Benefits
                 </h2>
                 <ul className="space-y-4">
@@ -305,7 +328,7 @@ export default function Contact() {
                       style={{ transitionDelay: `${200 + index * 75}ms` }}
                     >
                       <span className="text-[#F8A5B8] text-lg flex-shrink-0">✓</span>
-                      <span className="text-[#4A4A4A]/80">{benefit}</span>
+                      <span className="text-[#2D2424]/80">{benefit}</span>
                     </li>
                   ))}
                 </ul>
@@ -313,7 +336,7 @@ export default function Contact() {
 
               {/* Direct Contact */}
               <div
-                className={`bg-gradient-to-br from-[#F8A5B8] to-[#E8899C] rounded-3xl shadow-lg p-8 text-white transition-all duration-700 ${
+                className={`bg-gradient-to-br from-[#F8A5B8] to-[#E8919F] rounded-3xl shadow-lg p-8 text-white transition-all duration-700 ${
                   isFormVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
                 }`}
                 style={{ transitionDelay: '300ms' }}
@@ -340,7 +363,7 @@ export default function Contact() {
                 }`}
                 style={{ transitionDelay: '450ms' }}
               >
-                <h2 className="font-heading text-2xl font-semibold text-[#4A4A4A] mb-6">
+                <h2 className="font-heading text-2xl font-semibold text-[#2D2424] mb-6">
                   Follow Along
                 </h2>
                 <div className="flex gap-4">

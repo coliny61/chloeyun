@@ -1,10 +1,33 @@
+/**
+ * Legacy hook file — wraps useSupabase hooks and maps Supabase snake_case
+ * fields to camelCase aliases for backward compatibility with existing components.
+ * Will be removed when components are rewritten in later phases.
+ */
 import { useState, useEffect, useMemo } from 'react';
+import { supabase } from '../lib/supabase';
 import type { Place, FilterState, CuisineType, PriceRange, FilterCategory } from '../types';
 import { CATEGORY_TO_CUISINES } from '../types';
-import { fetchPlaces, fetchPlaceById, fetchFeaturedPlaces } from '../lib/notion';
-import { mockPlaces, getMockPlaceById, getMockFeaturedPlaces } from '../lib/mockData';
 
-const USE_MOCK_DATA = !import.meta.env.VITE_NOTION_API_KEY;
+/** Map a Supabase row to the Place interface with legacy aliases */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function mapPlace(row: any): Place {
+  return {
+    ...row,
+    // Legacy aliases
+    cuisineType: row.cuisine_type ?? 'Other',
+    priceRange: row.price_range ?? '$$',
+    coverImage: row.cover_image_url ?? '',
+    reviewContent: row.review ?? '',
+    featured: row.is_featured ?? false,
+    published: true,
+    tikTokUrl: row.tiktok_url ?? undefined,
+    instagramUrl: row.instagram_url ?? undefined,
+    dateReviewed: row.date_reviewed ?? undefined,
+    location: 'DFW',
+    address: row.address ?? '',
+    rating: row.rating ?? 0,
+  };
+}
 
 export function usePlaces() {
   const [places, setPlaces] = useState<Place[]>([]);
@@ -12,25 +35,22 @@ export function usePlaces() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    async function loadPlaces() {
+    async function load() {
       try {
         setLoading(true);
-        if (USE_MOCK_DATA) {
-          // Simulate network delay for mock data
-          await new Promise(resolve => setTimeout(resolve, 500));
-          setPlaces(mockPlaces);
-        } else {
-          const data = await fetchPlaces();
-          setPlaces(data.length > 0 ? data : mockPlaces);
-        }
+        const { data, error: err } = await supabase
+          .from('places')
+          .select('*')
+          .order('date_reviewed', { ascending: false });
+        if (err) throw err;
+        setPlaces((data ?? []).map(mapPlace));
       } catch (err) {
-        setError('Failed to load places');
-        setPlaces(mockPlaces);
+        setError(err instanceof Error ? err.message : 'Failed to load places');
       } finally {
         setLoading(false);
       }
     }
-    loadPlaces();
+    load();
   }, []);
 
   return { places, loading, error };
@@ -42,38 +62,28 @@ export function usePlace(id: string | undefined) {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    async function loadPlace() {
-      if (!id) {
-        setLoading(false);
-        return;
-      }
+    if (!id) {
+      setLoading(false);
+      return;
+    }
 
+    async function load() {
       try {
         setLoading(true);
-        if (USE_MOCK_DATA) {
-          await new Promise(resolve => setTimeout(resolve, 300));
-          const mockPlace = getMockPlaceById(id);
-          setPlace(mockPlace || null);
-          if (!mockPlace) setError('Place not found');
-        } else {
-          const data = await fetchPlaceById(id);
-          if (data) {
-            setPlace(data);
-          } else {
-            const mockPlace = getMockPlaceById(id);
-            setPlace(mockPlace || null);
-            if (!mockPlace) setError('Place not found');
-          }
-        }
+        const { data, error: err } = await supabase
+          .from('places')
+          .select('*')
+          .eq('id', id)
+          .single();
+        if (err) throw err;
+        setPlace(mapPlace(data));
       } catch (err) {
-        setError('Failed to load place');
-        const mockPlace = getMockPlaceById(id);
-        setPlace(mockPlace || null);
+        setError(err instanceof Error ? err.message : 'Place not found');
       } finally {
         setLoading(false);
       }
     }
-    loadPlace();
+    load();
   }, [id]);
 
   return { place, loading, error };
@@ -84,23 +94,23 @@ export function useFeaturedPlaces() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function loadFeatured() {
+    async function load() {
       try {
         setLoading(true);
-        if (USE_MOCK_DATA) {
-          await new Promise(resolve => setTimeout(resolve, 400));
-          setPlaces(getMockFeaturedPlaces());
-        } else {
-          const data = await fetchFeaturedPlaces();
-          setPlaces(data.length > 0 ? data : getMockFeaturedPlaces());
-        }
+        const { data, error: err } = await supabase
+          .from('places')
+          .select('*')
+          .eq('is_featured', true)
+          .order('date_reviewed', { ascending: false });
+        if (err) throw err;
+        setPlaces((data ?? []).map(mapPlace));
       } catch {
-        setPlaces(getMockFeaturedPlaces());
+        // Silent fail
       } finally {
         setLoading(false);
       }
     }
-    loadFeatured();
+    load();
   }, []);
 
   return { places, loading };
@@ -108,38 +118,26 @@ export function useFeaturedPlaces() {
 
 export function useFilteredPlaces(places: Place[], filters: FilterState) {
   return useMemo(() => {
-    // Get all cuisine types that match selected categories
     let selectedCuisines: CuisineType[] = filters.categories.flatMap(
       category => CATEGORY_TO_CUISINES[category]
     );
 
-    // If Asian is selected and there are specific Asian cuisine sub-filters,
-    // replace the Asian cuisines with only the selected ones
     if (filters.categories.includes('Asian') && filters.asianCuisines.length > 0) {
-      // Remove all Asian cuisines from selectedCuisines
       const asianCuisineSet = new Set(CATEGORY_TO_CUISINES['Asian']);
       selectedCuisines = selectedCuisines.filter(c => !asianCuisineSet.has(c));
-      // Add back only the selected Asian sub-cuisines
       selectedCuisines = [...selectedCuisines, ...filters.asianCuisines];
     }
 
     return places.filter(place => {
-      // Filter by category (which maps to cuisine types)
       if (selectedCuisines.length > 0 && !selectedCuisines.includes(place.cuisineType)) {
         return false;
       }
-
-      // Filter by price range
-      if (filters.priceRanges.length > 0 && !filters.priceRanges.includes(place.priceRange)) {
+      if (filters.priceRanges.length > 0 && !filters.priceRanges.includes(place.priceRange as PriceRange)) {
         return false;
       }
-
-      // Filter by minimum rating
       if (place.rating < filters.minRating) {
         return false;
       }
-
-      // Filter by search query
       if (filters.searchQuery) {
         const query = filters.searchQuery.toLowerCase();
         const matchesName = place.name.toLowerCase().includes(query);
@@ -149,42 +147,109 @@ export function useFilteredPlaces(places: Place[], filters: FilterState) {
           return false;
         }
       }
-
       return true;
     });
   }, [places, filters]);
 }
 
-export const CUISINE_TYPES: CuisineType[] = [
-  'Korean',
-  'Japanese',
-  'Chinese',
-  'Mexican',
-  'Italian',
-  'American',
-  'Thai',
-  'Vietnamese',
-  'Indian',
-  'Mediterranean',
-  'French',
-  'Fusion',
-  'Dessert',
-  'Cafe',
-  'Coffee',
-  'Bar',
-  'Other',
-];
+// Icon map for known filter categories
+const CATEGORY_ICONS: Record<string, string> = {
+  'Asian': '🍜',
+  'Latin': '🌮',
+  'European': '🍝',
+  'American': '🍔',
+  'Sweet Treats': '🍰',
+  'Coffee & Cafe': '☕',
+  'Bars & Drinks': '🍸',
+  'Other': '🍽️',
+};
 
-// User-friendly filter categories with icons/emojis
-export const FILTER_CATEGORIES: { category: FilterCategory; label: string; icon: string }[] = [
-  { category: 'Asian', label: 'Asian', icon: '🍜' },
-  { category: 'Latin', label: 'Latin', icon: '🌮' },
-  { category: 'European', label: 'European', icon: '🍝' },
-  { category: 'American', label: 'American', icon: '🍔' },
-  { category: 'Sweet Treats', label: 'Sweet Treats', icon: '🍰' },
-  { category: 'Coffee & Cafe', label: 'Coffee & Cafe', icon: '☕' },
-  { category: 'Bars & Drinks', label: 'Bars & Drinks', icon: '🍸' },
-  { category: 'Other', label: 'Other', icon: '🍽️' },
-];
+// Icon map for known Asian sub-cuisines
+const ASIAN_CUISINE_ICONS: Record<string, string> = {
+  'Korean': '🇰🇷',
+  'Japanese': '🇯🇵',
+  'Chinese': '🇨🇳',
+  'Thai': '🇹🇭',
+  'Vietnamese': '🇻🇳',
+  'Indian': '🇮🇳',
+};
+
+/**
+ * Derive filter categories and Asian sub-cuisines dynamically from data.
+ * Only shows categories/cuisines that actually exist in the places array.
+ */
+export function useDynamicFilters(places: Place[]) {
+  return useMemo(() => {
+    const categorySet = new Set<string>();
+    const cuisineSet = new Set<string>();
+
+    places.forEach((place) => {
+      if (place.cuisineType) cuisineSet.add(place.cuisineType);
+      // Use filter_category if set, otherwise reverse-lookup from CATEGORY_TO_CUISINES
+      if (place.filter_category) {
+        categorySet.add(place.filter_category);
+      } else if (place.cuisineType) {
+        let found = false;
+        for (const [cat, cuisines] of Object.entries(CATEGORY_TO_CUISINES)) {
+          if (cuisines.includes(place.cuisineType)) {
+            categorySet.add(cat);
+            found = true;
+            break;
+          }
+        }
+        if (!found) categorySet.add('Other');
+      }
+    });
+
+    // Build filter categories from what exists in data
+    const filterCategories: { category: FilterCategory; label: string; icon: string }[] = [];
+    // Show known categories in a stable order, then any new ones
+    const knownOrder: FilterCategory[] = ['Asian', 'Latin', 'European', 'American', 'Sweet Treats', 'Coffee & Cafe', 'Bars & Drinks', 'Other'];
+    for (const cat of knownOrder) {
+      if (categorySet.has(cat)) {
+        filterCategories.push({
+          category: cat,
+          label: cat,
+          icon: CATEGORY_ICONS[cat] || '🍽️',
+        });
+      }
+    }
+    // Any categories not in knownOrder
+    for (const cat of categorySet) {
+      if (!knownOrder.includes(cat as FilterCategory)) {
+        filterCategories.push({
+          category: cat as FilterCategory,
+          label: cat,
+          icon: CATEGORY_ICONS[cat] || '🍽️',
+        });
+      }
+    }
+
+    // Build Asian sub-cuisines from data
+    const asianCuisines = CATEGORY_TO_CUISINES['Asian'] || [];
+    const activeAsianCuisines: { cuisine: string; label: string; icon: string }[] = [];
+    for (const cuisine of asianCuisines) {
+      if (cuisineSet.has(cuisine)) {
+        activeAsianCuisines.push({
+          cuisine,
+          label: cuisine,
+          icon: ASIAN_CUISINE_ICONS[cuisine] || '🍜',
+        });
+      }
+    }
+    // Also include any cuisine in the data that maps to Asian but isn't in the known list
+    cuisineSet.forEach((c) => {
+      if (!asianCuisines.includes(c) && !activeAsianCuisines.find((a) => a.cuisine === c)) {
+        // Check if this cuisine's place has filter_category 'Asian'
+        const hasAsianPlace = places.some((p) => p.cuisineType === c && p.filter_category === 'Asian');
+        if (hasAsianPlace) {
+          activeAsianCuisines.push({ cuisine: c, label: c, icon: '🍜' });
+        }
+      }
+    });
+
+    return { filterCategories, asianCuisines: activeAsianCuisines };
+  }, [places]);
+}
 
 export const PRICE_RANGES: PriceRange[] = ['$', '$$', '$$$', '$$$$'];

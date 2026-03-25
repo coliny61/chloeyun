@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
+import { LogoFull } from '../ui/Logo';
 
 const navLinks = [
   { name: 'Home', path: '/' },
-  { name: 'Food', path: '/map' },
+  { name: 'Food Spots', path: '/food-spots' },
   { name: 'Events', path: '/events' },
   { name: 'Vlog', path: '/vlog' },
   { name: 'About', path: '/about' },
@@ -22,14 +23,15 @@ export default function Navigation() {
   };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm shadow-sm">
+    <nav
+      className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm shadow-sm"
+      aria-label="Main navigation"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2">
-            <span className="font-heading text-2xl font-bold text-[#F8A5B8]">
-              Chloe Eats DFW
-            </span>
+          <Link to="/" aria-label="Chloe Eats DFW — Home">
+            <LogoFull />
           </Link>
 
           {/* Desktop Navigation */}
@@ -41,15 +43,15 @@ export default function Navigation() {
                 className={`text-sm font-medium transition-colors duration-200 ${
                   isActive(link.path)
                     ? 'text-[#F8A5B8]'
-                    : 'text-[#4A4A4A] hover:text-[#F8A5B8]'
+                    : 'text-[#2D2424] hover:text-[#F8A5B8]'
                 }`}
               >
                 {link.name}
               </Link>
             ))}
             <Link
-              to="/map"
-              className="bg-[#F8A5B8] text-white px-5 py-2 rounded-full text-sm font-medium hover:bg-[#E8899C] transition-colors"
+              to="/food-spots"
+              className="bg-[#F8A5B8] text-white px-5 py-2 rounded-full text-sm font-medium hover:bg-[#E8919F] transition-colors"
             >
               Find Food
             </Link>
@@ -58,7 +60,9 @@ export default function Navigation() {
           {/* Mobile menu button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2 rounded-lg text-[#4A4A4A] hover:bg-[#FFF5F7]"
+            className="md:hidden p-2 rounded-lg text-[#2D2424] hover:bg-[#FFF5F7]"
+            aria-label={isOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={isOpen}
           >
             {isOpen ? (
               <XMarkIcon className="w-6 h-6" />
@@ -70,26 +74,27 @@ export default function Navigation() {
 
         {/* Mobile Navigation */}
         {isOpen && (
-          <div className="md:hidden py-4 border-t border-[#FFF5F7]">
+          <div className="md:hidden py-4 border-t border-[#FFF5F7]" role="menu">
             <div className="flex flex-col gap-2">
               {navLinks.map((link) => (
                 <Link
                   key={link.path}
                   to={link.path}
                   onClick={() => setIsOpen(false)}
+                  role="menuitem"
                   className={`px-4 py-3 rounded-lg text-base font-medium transition-colors ${
                     isActive(link.path)
                       ? 'bg-[#FFF5F7] text-[#F8A5B8]'
-                      : 'text-[#4A4A4A] hover:bg-[#FFF5F7]'
+                      : 'text-[#2D2424] hover:bg-[#FFF5F7]'
                   }`}
                 >
                   {link.name}
                 </Link>
               ))}
               <Link
-                to="/map"
+                to="/food-spots"
                 onClick={() => setIsOpen(false)}
-                className="mx-4 mt-2 bg-[#F8A5B8] text-white px-5 py-3 rounded-full text-center font-medium hover:bg-[#E8899C] transition-colors"
+                className="mx-4 mt-2 bg-[#F8A5B8] text-white px-5 py-3 rounded-full text-center font-medium hover:bg-[#E8919F] transition-colors"
               >
                 Find Food
               </Link>

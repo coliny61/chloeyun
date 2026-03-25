@@ -38,10 +38,10 @@ export default function FeaturedSpots() {
             isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}
         >
-          <h2 className="font-heading text-3xl sm:text-4xl font-bold text-[#4A4A4A]">
+          <h2 className="font-heading text-3xl sm:text-4xl font-bold text-[#2D2424]">
             Featured Food Spots
           </h2>
-          <p className="mt-4 text-lg text-[#4A4A4A]/70 max-w-2xl mx-auto">
+          <p className="mt-4 text-lg text-[#2D2424]/70 max-w-2xl mx-auto">
             My hand-picked favorites that you absolutely have to try. These are the places I keep coming back to!
           </p>
         </div>
@@ -94,7 +94,7 @@ export default function FeaturedSpots() {
                           <span className="truncate">{place.address}</span>
                         </CardDescription>
                         {isFeatured && (
-                          <p className="mt-3 text-sm text-[#4A4A4A]/80 lg:text-white/90 line-clamp-2 hidden lg:block">
+                          <p className="mt-3 text-sm text-[#2D2424]/80 lg:text-white/90 line-clamp-2 hidden lg:block">
                             {place.reviewContent}
                           </p>
                         )}
@@ -114,7 +114,7 @@ export default function FeaturedSpots() {
           }`}
           style={{ transitionDelay: '600ms' }}
         >
-          <Link to="/map">
+          <Link to="/food-spots">
             <Button size="lg" className="group">
               <span>View All Spots on Map</span>
               <svg

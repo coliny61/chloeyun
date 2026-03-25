@@ -1,10 +1,14 @@
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { ArrowDownTrayIcon } from '@heroicons/react/24/outline';
 import Button from '../components/ui/Button';
+import { useSiteSettings } from '../hooks/useSupabase';
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
 import { useCounter } from '../hooks/useCounter';
 import { useReducedMotion } from '../hooks/useReducedMotion';
 import { BentoGrid, BentoItem } from '../components/ui/BentoGrid';
+import { usePageMeta } from '../hooks/usePageMeta';
+import { trackEvent } from '../lib/analytics';
 
 interface AnimatedStatProps {
   value: number;
@@ -26,7 +30,7 @@ function AnimatedStat({ value, suffix, label, shouldAnimate, delay = 0 }: Animat
   return (
     <div className="text-center p-6 bg-[#FFF5F7] rounded-2xl">
       <p className="font-heading text-4xl font-bold text-[#F8A5B8]">{animatedValue}</p>
-      <p className="text-[#4A4A4A] mt-2">{label}</p>
+      <p className="text-[#2D2424] mt-2">{label}</p>
     </div>
   );
 }
@@ -44,6 +48,7 @@ function AnimatedProgressBar({ label, percentage, shouldAnimate, delay = 0 }: An
 
   useEffect(() => {
     if (!shouldAnimate) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setWidth(0);
       return;
     }
@@ -62,12 +67,12 @@ function AnimatedProgressBar({ label, percentage, shouldAnimate, delay = 0 }: An
   return (
     <div>
       <div className="flex justify-between mb-2">
-        <span className="text-[#4A4A4A] font-medium">{label}</span>
+        <span className="text-[#2D2424] font-medium">{label}</span>
         <span className="text-[#F8A5B8] font-semibold">{percentage}%</span>
       </div>
       <div className="h-3 bg-[#FFF5F7] rounded-full overflow-hidden">
         <div
-          className="h-3 bg-gradient-to-r from-[#F8A5B8] to-[#E8899C] rounded-full transition-all duration-1000 ease-out"
+          className="h-3 bg-gradient-to-r from-[#F8A5B8] to-[#E8919F] rounded-full transition-all duration-1000 ease-out"
           style={{ width: `${width}%` }}
         />
       </div>
@@ -107,9 +112,20 @@ const services = [
 
 const brands = ['Mamani', "Norman's Japanese", 'Tatsu Dallas', 'Written by the Seasons', 'Pillar', 'NADC Burger', 'Big Dash', 'Balloon Museum'];
 
+function parseStatValue(value: string): { number: number; suffix: string } {
+  const match = value.match(/^([\d.]+)([KMB+%]*)/);
+  if (match) return { number: parseFloat(match[1]), suffix: match[2] || '' };
+  return { number: 0, suffix: '' };
+}
+
 export default function MediaKit() {
+  usePageMeta(
+    'Media Kit | Chloe Eats DFW',
+    'Partner with Chloe Eats DFW. Social stats, audience demographics, services, and past collaborations. Contact for rates.'
+  );
   const [isLoaded, setIsLoaded] = useState(false);
   const prefersReducedMotion = useReducedMotion();
+  const { stats: siteStats, settings } = useSiteSettings();
 
   const { ref: statsRef, isVisible: isStatsVisible } = useScrollAnimation<HTMLElement>({
     threshold: 0.2,
@@ -133,6 +149,7 @@ export default function MediaKit() {
 
   useEffect(() => {
     if (prefersReducedMotion) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsLoaded(true);
       return;
     }
@@ -141,7 +158,7 @@ export default function MediaKit() {
   }, [prefersReducedMotion]);
 
   return (
-    <div className="min-h-screen bg-[#FFFBFC] pt-20">
+    <div className="min-h-screen bg-[#FAF6F0] pt-20">
       {/* Hero Section */}
       <section className="py-16 bg-gradient-to-br from-[#FFF5F7] to-[#FDD5DD] relative overflow-hidden">
         {/* Decorative elements */}
@@ -152,20 +169,39 @@ export default function MediaKit() {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="text-center lg:text-left">
               <h1
-                className={`font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-[#4A4A4A] transition-all duration-700 ${
+                className={`font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-[#2D2424] transition-all duration-700 ${
                   isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
                 }`}
               >
                 Media Kit
               </h1>
               <p
-                className={`mt-6 text-xl text-[#4A4A4A]/80 transition-all duration-700 ${
+                className={`mt-6 text-xl text-[#2D2424]/80 transition-all duration-700 ${
                   isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
                 }`}
                 style={{ transitionDelay: '150ms' }}
               >
                 Let's create something amazing together. Here's everything you need to know about partnering with Chloe Eats DFW.
               </p>
+              <div
+                className={`mt-8 flex flex-wrap gap-4 justify-center lg:justify-start transition-all duration-700 ${
+                  isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+                }`}
+                style={{ transitionDelay: '300ms' }}
+              >
+                <Link to="/contact">
+                  <Button size="lg">Contact for Rates</Button>
+                </Link>
+                <Button
+                  variant="outline"
+                  size="lg"
+                  onClick={() => { trackEvent('download', 'Media Kit', 'PDF'); window.print(); }}
+                  className="group"
+                >
+                  <ArrowDownTrayIcon className="w-5 h-5 mr-2" />
+                  Download PDF
+                </Button>
+              </div>
             </div>
             <div
               className={`flex justify-center lg:justify-end transition-all duration-700 ${
@@ -189,34 +225,38 @@ export default function MediaKit() {
       <section ref={statsRef} className="py-16 bg-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2
-            className={`font-heading text-3xl font-bold text-[#4A4A4A] text-center mb-12 transition-all duration-700 ${
+            className={`font-heading text-3xl font-bold text-[#2D2424] text-center mb-12 transition-all duration-700 ${
               isStatsVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             }`}
           >
             By The Numbers
           </h2>
           <BentoGrid columns={4}>
-            <BentoItem index={0} isVisible={isStatsVisible}>
-              <AnimatedStat value={27} suffix="K+" label="TikTok Followers" shouldAnimate={isStatsVisible} delay={0} />
-            </BentoItem>
-            <BentoItem index={1} isVisible={isStatsVisible}>
-              <AnimatedStat value={1.6} suffix="M+" label="TikTok Likes" shouldAnimate={isStatsVisible} delay={100} />
-            </BentoItem>
-            <BentoItem index={2} isVisible={isStatsVisible}>
-              <AnimatedStat value={2.8} suffix="M+" label="Views in 2025" shouldAnimate={isStatsVisible} delay={200} />
-            </BentoItem>
-            <BentoItem index={3} isVisible={isStatsVisible}>
-              <AnimatedStat value={2.9} suffix="K+" label="Instagram Followers" shouldAnimate={isStatsVisible} delay={300} />
-            </BentoItem>
+            {[
+              { ...parseStatValue(siteStats.tikTokFollowers || '27K+'), label: 'TikTok Followers' },
+              { ...parseStatValue(siteStats.tikTokLikes || '1.6M+'), label: 'TikTok Likes' },
+              { ...parseStatValue(siteStats.viewsThisYear || '2.8M+'), label: 'Total Views' },
+              { ...parseStatValue(siteStats.instagramFollowers || '2.9K+'), label: 'Instagram Followers' },
+            ].map((stat, index) => (
+              <BentoItem key={stat.label} index={index} isVisible={isStatsVisible}>
+                <AnimatedStat
+                  value={stat.number}
+                  suffix={stat.suffix}
+                  label={stat.label}
+                  shouldAnimate={isStatsVisible}
+                  delay={index * 100}
+                />
+              </BentoItem>
+            ))}
           </BentoGrid>
         </div>
       </section>
 
       {/* Services Section */}
-      <section ref={servicesRef} className="py-16 bg-[#FFFBFC]">
+      <section ref={servicesRef} className="py-16 bg-[#FAF6F0]">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2
-            className={`font-heading text-3xl font-bold text-[#4A4A4A] text-center mb-12 transition-all duration-700 ${
+            className={`font-heading text-3xl font-bold text-[#2D2424] text-center mb-12 transition-all duration-700 ${
               isServicesVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             }`}
           >
@@ -234,8 +274,8 @@ export default function MediaKit() {
                 <div className="w-12 h-12 bg-[#F8A5B8]/20 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                   {service.icon}
                 </div>
-                <h3 className="font-heading text-xl font-semibold text-[#4A4A4A] mb-3">{service.title}</h3>
-                <p className="text-[#4A4A4A]/70">{service.description}</p>
+                <h3 className="font-heading text-xl font-semibold text-[#2D2424] mb-3">{service.title}</h3>
+                <p className="text-[#2D2424]/70">{service.description}</p>
               </div>
             ))}
           </div>
@@ -246,7 +286,7 @@ export default function MediaKit() {
       <section ref={audienceRef} className="py-16 bg-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2
-            className={`font-heading text-3xl font-bold text-[#4A4A4A] text-center mb-12 transition-all duration-700 ${
+            className={`font-heading text-3xl font-bold text-[#2D2424] text-center mb-12 transition-all duration-700 ${
               isAudienceVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             }`}
           >
@@ -259,9 +299,9 @@ export default function MediaKit() {
               }`}
             >
               <div className="space-y-6">
-                <AnimatedProgressBar label="Women" percentage={72} shouldAnimate={isAudienceVisible} delay={0} />
-                <AnimatedProgressBar label="Ages 18-34" percentage={68} shouldAnimate={isAudienceVisible} delay={150} />
-                <AnimatedProgressBar label="DFW Area" percentage={85} shouldAnimate={isAudienceVisible} delay={300} />
+                <AnimatedProgressBar label="Women" percentage={parseInt(settings['audience_women_pct']) || 72} shouldAnimate={isAudienceVisible} delay={0} />
+                <AnimatedProgressBar label="Ages 18-34" percentage={parseInt(settings['audience_18_34_pct']) || 68} shouldAnimate={isAudienceVisible} delay={150} />
+                <AnimatedProgressBar label="DFW Area" percentage={parseInt(settings['audience_dfw_pct']) || 85} shouldAnimate={isAudienceVisible} delay={300} />
               </div>
             </div>
             <div
@@ -270,8 +310,8 @@ export default function MediaKit() {
               }`}
               style={{ transitionDelay: '200ms' }}
             >
-              <h3 className="font-heading text-xl font-semibold text-[#4A4A4A] mb-4">Ideal For</h3>
-              <ul className="space-y-3 text-[#4A4A4A]/80">
+              <h3 className="font-heading text-xl font-semibold text-[#2D2424] mb-4">Ideal For</h3>
+              <ul className="space-y-3 text-[#2D2424]/80">
                 {[
                   'Restaurants & Cafes',
                   'Food & Beverage Brands',
@@ -297,17 +337,17 @@ export default function MediaKit() {
       </section>
 
       {/* Past Collaborations */}
-      <section ref={brandsRef} className="py-16 bg-[#FFFBFC]">
+      <section ref={brandsRef} className="py-16 bg-[#FAF6F0]">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2
-            className={`font-heading text-3xl font-bold text-[#4A4A4A] text-center mb-4 transition-all duration-700 ${
+            className={`font-heading text-3xl font-bold text-[#2D2424] text-center mb-4 transition-all duration-700 ${
               isBrandsVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             }`}
           >
             Past Collaborations
           </h2>
           <p
-            className={`text-center text-[#4A4A4A]/70 mb-12 max-w-2xl mx-auto transition-all duration-700 ${
+            className={`text-center text-[#2D2424]/70 mb-12 max-w-2xl mx-auto transition-all duration-700 ${
               isBrandsVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             }`}
             style={{ transitionDelay: '100ms' }}
@@ -323,7 +363,7 @@ export default function MediaKit() {
                 }`}
                 style={{ transitionDelay: `${200 + index * 75}ms` }}
               >
-                <p className="font-medium text-[#4A4A4A]">{brand}</p>
+                <p className="font-medium text-[#2D2424]">{brand}</p>
               </div>
             ))}
           </div>
@@ -331,7 +371,7 @@ export default function MediaKit() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-br from-[#F8A5B8] to-[#E8899C] relative overflow-hidden">
+      <section className="py-20 bg-gradient-to-br from-[#F8A5B8] to-[#E8919F] relative overflow-hidden">
         {/* Decorative elements */}
         <div className="absolute top-0 left-1/4 w-64 h-64 bg-white/10 rounded-full blur-3xl animate-float" />
         <div className="absolute bottom-0 right-1/4 w-48 h-48 bg-white/5 rounded-full blur-2xl animate-float" style={{ animationDelay: '1s' }} />
@@ -347,7 +387,7 @@ export default function MediaKit() {
             <Link to="/contact">
               <Button
                 size="lg"
-                className="bg-[#4A4A4A] text-white hover:bg-[#3a3a3a] hover:shadow-xl shadow-lg group"
+                className="bg-[#2D2424] text-white hover:bg-[#3a3a3a] hover:shadow-xl shadow-lg group"
               >
                 <span>Get in Touch</span>
                 <svg

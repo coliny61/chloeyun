@@ -5,8 +5,13 @@ import Stats from '../components/home/Stats';
 import Button from '../components/ui/Button';
 import { WaveDivider, CurveDivider } from '../components/ui/SectionDivider';
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
+import { usePageMeta } from '../hooks/usePageMeta';
 
 export default function Home() {
+  usePageMeta(
+    'Chloe Eats DFW | Dallas-Fort Worth Food Explorer',
+    'Discover the best food spots in Dallas-Fort Worth with Chloe. Interactive food map, honest reviews, and recommendations for every craving.'
+  );
   const { ref: aboutRef, isVisible: isAboutVisible } = useScrollAnimation<HTMLElement>({
     threshold: 0.2,
     triggerOnce: true,
@@ -59,8 +64,8 @@ export default function Home() {
               }`}
             >
               <img
-                src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600"
-                alt="Chloe exploring food"
+                src="/images/chloe/eating-casual.jpg"
+                alt="Chloe Yun"
                 className="rounded-3xl shadow-xl w-full object-cover aspect-square"
               />
               {/* Floating card */}
@@ -71,7 +76,7 @@ export default function Home() {
                 style={{ transitionDelay: '400ms' }}
               >
                 <p className="font-heading text-3xl font-bold gradient-text-animated">5+</p>
-                <p className="text-[#4A4A4A] text-sm mt-1">Years of food exploring</p>
+                <p className="text-[#2D2424] text-sm mt-1">Years of food exploring</p>
               </div>
               {/* Decorative blob */}
               <div className="absolute -top-4 -left-4 w-48 h-48 bg-[#F8A5B8]/20 rounded-full blur-2xl -z-10" />
@@ -84,14 +89,14 @@ export default function Home() {
               }`}
               style={{ transitionDelay: '200ms' }}
             >
-              <h2 className="font-heading text-3xl sm:text-4xl font-bold text-[#4A4A4A]">
+              <h2 className="font-heading text-3xl sm:text-4xl font-bold text-[#2D2424]">
                 Hi, I'm Chloe!
               </h2>
-              <p className="mt-6 text-lg text-[#4A4A4A]/80 leading-relaxed">
+              <p className="mt-6 text-lg text-[#2D2424]/80 leading-relaxed">
                 Food has always been my love language. Whether it's discovering a hidden gem in Carrollton
                 or finding the best KBBQ in DFW, I'm on a mission to share the best spots with you.
               </p>
-              <p className="mt-4 text-lg text-[#4A4A4A]/80 leading-relaxed">
+              <p className="mt-4 text-lg text-[#2D2424]/80 leading-relaxed">
                 From budget-friendly bites to special occasion splurges, I've got recommendations for
                 every craving and occasion. Let's eat!
               </p>
@@ -130,7 +135,7 @@ export default function Home() {
       {/* Partnership CTA */}
       <section
         ref={ctaRef}
-        className="py-20 bg-gradient-to-br from-[#F8A5B8] to-[#E8899C] relative overflow-hidden"
+        className="py-20 bg-gradient-to-br from-[#F8A5B8] to-[#E8919F] relative overflow-hidden"
       >
         {/* Decorative elements */}
         <div className="absolute top-0 left-1/4 w-64 h-64 bg-white/10 rounded-full blur-3xl animate-float" />

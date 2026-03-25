@@ -38,9 +38,10 @@ function FitBounds({ places }: { places: Place[] }) {
   const map = useMap();
 
   useEffect(() => {
-    if (places.length > 0) {
+    const validPlaces = places.filter(p => p.latitude != null && p.longitude != null);
+    if (validPlaces.length > 0) {
       const bounds = L.latLngBounds(
-        places.map(place => [place.latitude, place.longitude] as [number, number])
+        validPlaces.map(place => [place.latitude!, place.longitude!] as [number, number])
       );
       map.fitBounds(bounds, { padding: [50, 50], maxZoom: 14 });
     }
@@ -54,7 +55,7 @@ function SelectedPlaceHandler({ selectedPlace }: { selectedPlace: Place | null }
   const map = useMap();
 
   useEffect(() => {
-    if (selectedPlace) {
+    if (selectedPlace && selectedPlace.latitude != null && selectedPlace.longitude != null) {
       map.panTo([selectedPlace.latitude, selectedPlace.longitude]);
     }
   }, [selectedPlace, map]);
@@ -87,10 +88,10 @@ export default function FoodMap({ places, selectedPlace, setSelectedPlace }: Foo
       <FitBounds places={places} />
       <SelectedPlaceHandler selectedPlace={selectedPlace} />
 
-      {places.map((place) => (
+      {places.filter(p => p.latitude != null && p.longitude != null).map((place) => (
         <Marker
           key={place.id}
-          position={[place.latitude, place.longitude]}
+          position={[place.latitude!, place.longitude!]}
           icon={createMarkerIcon(selectedPlace?.id === place.id)}
           ref={(ref) => {
             markerRefs.current[place.id] = ref;

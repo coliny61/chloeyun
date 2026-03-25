@@ -56,7 +56,9 @@ export function useCounter(options: UseCounterOptions): UseCounterReturn {
 
   useEffect(() => {
     if (!shouldStart) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setValue(start);
+       
       setIsComplete(false);
       return;
     }

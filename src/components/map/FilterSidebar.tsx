@@ -2,8 +2,7 @@ import { Fragment } from 'react';
 import { Dialog, Transition, Disclosure } from '@headlessui/react';
 import { XMarkIcon, ChevronDownIcon, FunnelIcon } from '@heroicons/react/24/outline';
 import type { FilterState, FilterCategory, PriceRange, AsianCuisine } from '../../types';
-import { ASIAN_CUISINES } from '../../types';
-import { FILTER_CATEGORIES, PRICE_RANGES } from '../../hooks/usePlaces';
+import { PRICE_RANGES } from '../../hooks/usePlaces';
 import Button from '../ui/Button';
 
 interface FilterSidebarProps {
@@ -12,6 +11,8 @@ interface FilterSidebarProps {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
   resultsCount: number;
+  filterCategories: { category: FilterCategory; label: string; icon: string }[];
+  asianCuisines: { cuisine: string; label: string; icon: string }[];
 }
 
 export default function FilterSidebar({
@@ -20,6 +21,8 @@ export default function FilterSidebar({
   isOpen,
   setIsOpen,
   resultsCount,
+  filterCategories,
+  asianCuisines,
 }: FilterSidebarProps) {
   const handleCategoryToggle = (category: FilterCategory) => {
     setFilters(prev => {
@@ -35,12 +38,12 @@ export default function FilterSidebar({
     });
   };
 
-  const handleAsianCuisineToggle = (cuisine: AsianCuisine) => {
+  const handleAsianCuisineToggle = (cuisine: string) => {
     setFilters(prev => ({
       ...prev,
-      asianCuisines: prev.asianCuisines.includes(cuisine)
+      asianCuisines: prev.asianCuisines.includes(cuisine as AsianCuisine)
         ? prev.asianCuisines.filter(c => c !== cuisine)
-        : [...prev.asianCuisines, cuisine],
+        : [...prev.asianCuisines, cuisine as AsianCuisine],
     }));
   };
 
@@ -75,7 +78,7 @@ export default function FilterSidebar({
     filters.minRating > 0 ||
     filters.searchQuery;
 
-  const FilterContent = () => (
+  const filterContent = (
     <div className="space-y-6">
       {/* Search */}
       <div>
@@ -101,7 +104,7 @@ export default function FilterSidebar({
             </Disclosure.Button>
             <Disclosure.Panel className="mt-3 space-y-3">
               <div className="grid grid-cols-2 gap-2">
-                {FILTER_CATEGORIES.map(({ category, label, icon }) => (
+                {filterCategories.map(({ category, label, icon }) => (
                   <button
                     key={category}
                     onClick={() => handleCategoryToggle(category)}
@@ -118,18 +121,18 @@ export default function FilterSidebar({
               </div>
 
               {/* Asian Sub-filters - shown when Asian is selected */}
-              {isAsianSelected && (
+              {isAsianSelected && asianCuisines.length > 0 && (
                 <div className="pl-2 border-l-2 border-[#F8A5B8]/30 space-y-2 animate-slide-up-fade">
                   <p className="text-xs font-medium text-[#4A4A4A]/70 uppercase tracking-wide">
                     Narrow down Asian
                   </p>
                   <div className="flex flex-wrap gap-1.5">
-                    {ASIAN_CUISINES.map(({ cuisine, label, icon }) => (
+                    {asianCuisines.map(({ cuisine, label, icon }) => (
                       <button
                         key={cuisine}
                         onClick={() => handleAsianCuisineToggle(cuisine)}
                         className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 ${
-                          filters.asianCuisines.includes(cuisine)
+                          filters.asianCuisines.includes(cuisine as AsianCuisine)
                             ? 'bg-[#F8A5B8] text-white shadow-sm'
                             : 'bg-[#FFF5F7] text-[#4A4A4A] hover:bg-[#FDD5DD]'
                         }`}
@@ -238,7 +241,7 @@ export default function FilterSidebar({
         <h2 className="font-heading text-xl font-semibold text-[#4A4A4A] mb-6">
           Find Your Spot
         </h2>
-        <FilterContent />
+        {filterContent}
       </div>
 
       {/* Mobile Filter Button */}
@@ -295,7 +298,7 @@ export default function FilterSidebar({
                         </button>
                       </div>
                       <div className="flex-1 px-6 py-6 overflow-y-auto">
-                        <FilterContent />
+                        {filterContent}
                       </div>
                       <div className="px-6 py-4 border-t border-[#FFF5F7]">
                         <Button onClick={() => setIsOpen(false)} className="w-full">

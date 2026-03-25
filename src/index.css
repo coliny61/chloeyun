@@ -2,16 +2,18 @@
 @import "leaflet/dist/leaflet.css";
 
 @theme {
-  /* Brand Colors - Baby Pink Theme */
-  --color-primary: #F8A5B8;
-  --color-primary-dark: #E8899C;
+  /* Brand Colors — Rosé & Cream */
+  --color-primary: #F8A5B8;       /* Baby Pink — CTAs, accent */
+  --color-primary-dark: #E8919F;  /* Rosé — secondary, gradients */
   --color-primary-light: #FDD5DD;
-  --color-accent: #FFB6C1;
-  --color-cream: #FFF5F7;
-  --color-warm-gray: #4A4A4A;
+  --color-accent: #F8A5B8;
+  --color-cream: #FFF5F7;         /* Blush White — card backgrounds */
+  --color-warm-gray: #2D2424;     /* Espresso — primary text */
   --color-light-gray: #6B6B6B;
-  --color-off-white: #FFFBFC;
-  --color-gold: #D4AF37;
+  --color-off-white: #FAF6F0;     /* Eggshell — page background */
+  --color-eggshell: #FAF6F0;
+  --color-blush: #FFF5F7;
+  --color-espresso: #2D2424;
 
   /* Font Families */
   --font-heading: 'Playfair Display', serif;
@@ -406,6 +408,38 @@ html {
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
 }
 
+/* ===== FOCUS STYLES (Accessibility) ===== */
+
+/* Visible focus ring for keyboard navigation */
+*:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Remove default focus outline (replaced by focus-visible above) */
+*:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Skip to content link (screen reader + keyboard users) */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--color-primary);
+  color: white;
+  padding: 8px 16px;
+  z-index: 100;
+  font-size: 14px;
+  font-weight: 600;
+  transition: top 0.2s;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
 /* ===== REDUCED MOTION ===== */
 
 @media (prefers-reduced-motion: reduce) {
@@ -464,4 +498,59 @@ html {
 .leaflet-control-zoom a:hover {
   background-color: var(--color-cream) !important;
   color: var(--color-primary) !important;
+}
+
+/* ===== PRINT STYLES ===== */
+
+@media print {
+  /* Hide navigation, footer, buttons, and decorative elements */
+  nav,
+  footer,
+  .skip-link,
+  button:not([type="submit"]),
+  .animate-float,
+  .leaflet-control-zoom {
+    display: none !important;
+  }
+
+  /* Clean backgrounds for print */
+  body,
+  main,
+  section {
+    background: white !important;
+    color: #2D2424 !important;
+  }
+
+  /* Make all content visible (remove scroll animations) */
+  * {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+    transition: none !important;
+  }
+
+  /* Remove shadows and rounded corners for cleaner print */
+  .shadow-sm,
+  .shadow-md,
+  .shadow-lg,
+  .shadow-xl,
+  .shadow-2xl {
+    box-shadow: none !important;
+  }
+
+  /* Good page break behavior */
+  section {
+    page-break-inside: avoid;
+  }
+
+  h1, h2, h3 {
+    page-break-after: avoid;
+  }
+
+  /* Ensure gradient text is readable in print */
+  .gradient-text,
+  .gradient-text-animated {
+    -webkit-text-fill-color: #F8A5B8 !important;
+    background: none !important;
+  }
 }

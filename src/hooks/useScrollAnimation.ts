@@ -31,7 +31,9 @@ export function useScrollAnimation<T extends HTMLElement = HTMLDivElement>(
   useEffect(() => {
     // If reduced motion is preferred, show content immediately
     if (prefersReducedMotion) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsVisible(true);
+       
       setHasAnimated(true);
       return;
     }

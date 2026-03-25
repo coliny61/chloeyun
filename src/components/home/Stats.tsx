@@ -1,4 +1,4 @@
-import { mockStats } from '../../lib/mockData';
+import { useSiteSettings } from '../../hooks/useSupabase';
 import { useScrollAnimation } from '../../hooks/useScrollAnimation';
 import { useCounter } from '../../hooks/useCounter';
 import { getStaggerStyle } from '../../hooks/useStaggeredAnimation';
@@ -58,27 +58,28 @@ function parseStatValue(value: string): { number: number; suffix: string } {
   return { number: 0, suffix: '' };
 }
 
-const stats = [
-  {
-    label: 'TikTok Followers',
-    ...parseStatValue(mockStats.tikTokFollowers),
-  },
-  {
-    label: 'TikTok Likes',
-    ...parseStatValue(mockStats.tikTokLikes),
-  },
-  {
-    label: 'Views in 2025',
-    ...parseStatValue(mockStats.viewsThisYear),
-  },
-  {
-    label: 'Cities Covered',
-    number: mockStats.citiesCovered,
-    suffix: '+',
-  },
-];
-
 export default function Stats() {
+  const { stats: siteStats } = useSiteSettings();
+
+  const stats = [
+    {
+      label: 'TikTok Followers',
+      ...parseStatValue(siteStats.tikTokFollowers || '27K'),
+    },
+    {
+      label: 'TikTok Likes',
+      ...parseStatValue(siteStats.tikTokLikes || '1.6M'),
+    },
+    {
+      label: 'Views in 2025',
+      ...parseStatValue(siteStats.viewsThisYear || '2.8M'),
+    },
+    {
+      label: 'Cities Covered',
+      number: siteStats.citiesCovered || 5,
+      suffix: '+',
+    },
+  ];
   const { ref, isVisible } = useScrollAnimation<HTMLElement>({
     threshold: 0.2,
     triggerOnce: true,

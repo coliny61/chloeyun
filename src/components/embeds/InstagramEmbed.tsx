@@ -19,24 +19,49 @@ declare global {
 export default function InstagramEmbed({ url }: InstagramEmbedProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const sentinelRef = useRef<HTMLDivElement>(null);
 
   const postId = extractInstagramPostId(url);
 
+  // Lazy loading: only load embed when scrolled into view
   useEffect(() => {
-    if (!postId) {
-      setError(true);
+    if (!postId || !sentinelRef.current) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: '200px' }
+    );
+
+    observer.observe(sentinelRef.current);
+    return () => observer.disconnect();
+  }, [postId]);
+
+  // Load Instagram embed script only when visible
+  useEffect(() => {
+    if (!isVisible || !postId) return;
+
+    const existingScript = document.querySelector('script[src="https://www.instagram.com/embed.js"]');
+    if (existingScript) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setLoading(false);
+      if (window.instgrm) {
+        window.instgrm.Embeds.process();
+      }
       return;
     }
 
-    // Load Instagram embed script
     const script = document.createElement('script');
     script.src = 'https://www.instagram.com/embed.js';
     script.async = true;
     script.onload = () => {
       setLoading(false);
-      // Process the embed after script loads
       if (window.instgrm) {
         window.instgrm.Embeds.process();
       }
@@ -45,27 +70,13 @@ export default function InstagramEmbed({ url }: InstagramEmbedProps) {
       setError(true);
       setLoading(false);
     };
-
-    // Check if script already exists
-    const existingScript = document.querySelector('script[src="https://www.instagram.com/embed.js"]');
-    if (existingScript) {
-      setLoading(false);
-      if (window.instgrm) {
-        window.instgrm.Embeds.process();
-      }
-    } else {
-      document.body.appendChild(script);
-    }
-
-    return () => {
-      // Don't remove script on unmount to prevent reload issues
-    };
-  }, [postId]);
+    document.body.appendChild(script);
+  }, [isVisible, postId]);
 
   if (error || !postId) {
     return (
       <div className="bg-[#FFF5F7] rounded-xl p-8 text-center">
-        <p className="text-[#4A4A4A]">Unable to load Instagram post</p>
+        <p className="text-[#2D2424]">Unable to load Instagram post</p>
         <a
           href={url}
           target="_blank"
@@ -78,11 +89,22 @@ export default function InstagramEmbed({ url }: InstagramEmbedProps) {
     );
   }
 
-  // Normalize URL for embedding (ensure it ends without query params)
+  // Placeholder before lazy load
+  if (!isVisible) {
+    return (
+      <div
+        ref={sentinelRef}
+        className="bg-[#FFF5F7] rounded-xl min-h-[400px] flex items-center justify-center"
+      >
+        <div className="text-[#F8A5B8]/40 text-sm">Loading...</div>
+      </div>
+    );
+  }
+
   const embedUrl = url.includes('?') ? url.split('?')[0] : url;
 
   return (
-    <div className="relative">
+    <div className="relative" ref={sentinelRef}>
       {loading && (
         <div className="absolute inset-0 flex items-center justify-center bg-[#FFF5F7] rounded-xl min-h-[400px]">
           <Loading text="Loading Instagram..." />
