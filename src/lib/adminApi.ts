@@ -56,3 +56,17 @@ export async function adminDelete(table: string, id: string) {
 export async function enrichPlace(placeId: string, forceRefresh = false) {
   return adminFetch('/api/enrich', { placeId, forceRefresh });
 }
+
+export async function uploadImage(file: File, folder = 'uploads'): Promise<string> {
+  const filename = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
+  const res = await fetch(`/api/upload?filename=${encodeURIComponent(filename)}&folder=${folder}`, {
+    method: 'POST',
+    headers: {
+      'x-admin-password': adminPassword,
+    },
+    body: file,
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || 'Upload failed');
+  return data.url;
+}

@@ -10,17 +10,19 @@ import {
   adminUpdate,
   adminDelete,
   enrichPlace,
+  uploadImage,
 } from '../lib/adminApi';
 
-type Tab = 'spots' | 'events' | 'vlogs' | 'stats' | 'batch';
+type Tab = 'spots' | 'events' | 'vlogs' | 'stats' | 'batch' | 'photos';
 
 interface FormField {
   name: string;
   label: string;
-  type: 'text' | 'textarea' | 'number' | 'select' | 'date';
+  type: 'text' | 'textarea' | 'number' | 'select' | 'date' | 'file';
   required?: boolean;
   options?: string[];
   placeholder?: string;
+  folder?: string; // for file uploads
 }
 
 const SPOT_FIELDS: FormField[] = [
@@ -34,6 +36,7 @@ const SPOT_FIELDS: FormField[] = [
   { name: 'price_range', label: 'Price Range', type: 'select', options: ['$', '$$', '$$$', '$$$$'] },
   { name: 'date_reviewed', label: 'Date Reviewed', type: 'date' },
   { name: 'is_featured', label: 'Featured?', type: 'select', options: ['false', 'true'] },
+  { name: 'cover_image_url', label: 'Cover Photo (optional — auto-fetched if empty)', type: 'file', folder: 'places' },
 ];
 
 const EVENT_FIELDS: FormField[] = [
@@ -42,6 +45,7 @@ const EVENT_FIELDS: FormField[] = [
   { name: 'event_date', label: 'Event Date', type: 'date' },
   { name: 'tiktok_url', label: 'TikTok URL', type: 'text' },
   { name: 'instagram_url', label: 'Instagram URL', type: 'text' },
+  { name: 'cover_image_url', label: 'Cover Photo (optional)', type: 'file', folder: 'events' },
 ];
 
 const VLOG_FIELDS: FormField[] = [
@@ -49,6 +53,7 @@ const VLOG_FIELDS: FormField[] = [
   { name: 'tiktok_url', label: 'TikTok URL', type: 'text' },
   { name: 'instagram_url', label: 'Instagram URL', type: 'text' },
   { name: 'city', label: 'City / Location Tag', type: 'text', placeholder: 'e.g. DFW, Houston, NYC' },
+  { name: 'cover_image_url', label: 'Cover Photo (optional)', type: 'file', folder: 'vlogs' },
 ];
 
 const STAT_KEYS = [
@@ -137,17 +142,45 @@ function AdminForm({
   const [formData, setFormData] = useState<Record<string, string>>(() => {
     const init: Record<string, string> = {};
     fields.forEach((f) => {
-      init[f.name] = initialData?.[f.name] != null ? String(initialData[f.name]) : '';
+      if (f.type !== 'file') {
+        init[f.name] = initialData?.[f.name] != null ? String(initialData[f.name]) : '';
+      }
     });
     return init;
   });
+  const [fileFields, setFileFields] = useState<Record<string, File | null>>({});
   const [loading, setLoading] = useState(false);
+  const [uploadStatus, setUploadStatus] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setUploadStatus('');
+
+    // Upload any files first
+    const uploadedUrls: Record<string, string> = {};
+    for (const field of fields) {
+      if (field.type === 'file' && fileFields[field.name]) {
+        try {
+          setUploadStatus(`Uploading ${field.label}...`);
+          const url = await uploadImage(fileFields[field.name]!, field.folder || 'uploads');
+          uploadedUrls[field.name] = url;
+        } catch {
+          setUploadStatus(`Failed to upload ${field.label}`);
+          setLoading(false);
+          return;
+        }
+      }
+    }
+
     const data: Record<string, unknown> = {};
     fields.forEach((f) => {
+      if (f.type === 'file') {
+        if (uploadedUrls[f.name]) {
+          data[f.name] = uploadedUrls[f.name];
+        }
+        return;
+      }
       const val = formData[f.name];
       if (f.name === 'is_featured') {
         data[f.name] = val === 'true';
@@ -157,6 +190,7 @@ function AdminForm({
         data[f.name] = val;
       }
     });
+    setUploadStatus('');
     await onSubmit(data);
     setLoading(false);
   };
@@ -188,6 +222,26 @@ function AdminForm({
                 <option key={opt} value={opt}>{opt}</option>
               ))}
             </select>
+          ) : field.type === 'file' ? (
+            <div>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => {
+                  const file = e.target.files?.[0] || null;
+                  setFileFields((p) => ({ ...p, [field.name]: file }));
+                }}
+                className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F8A5B8] text-sm file:mr-3 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-sm file:bg-[#F8A5B8]/10 file:text-[#F8A5B8] file:font-medium"
+              />
+              {Boolean(initialData?.[field.name]) && !fileFields[field.name] && (
+                <p className="mt-1 text-xs text-[#2D2424]/50">
+                  Current: <a href={String(initialData?.[field.name])} target="_blank" rel="noreferrer" className="text-[#F8A5B8] hover:underline">View image</a>
+                </p>
+              )}
+              {fileFields[field.name] && (
+                <p className="mt-1 text-xs text-green-600">New image selected: {fileFields[field.name]!.name}</p>
+              )}
+            </div>
           ) : (
             <input
               type={field.type}
@@ -203,6 +257,7 @@ function AdminForm({
           )}
         </div>
       ))}
+      {uploadStatus && <p className="text-sm text-[#F8A5B8]">{uploadStatus}</p>}
       <div className="flex gap-3 pt-2">
         <Button type="submit" disabled={loading}>
           {loading ? 'Saving...' : submitLabel}
@@ -547,6 +602,111 @@ function BatchImport() {
 }
 
 // ============================================================
+// About Photos Manager
+// ============================================================
+
+function PhotosManager() {
+  const [photos, setPhotos] = useState<{ id: string; image_url: string; sort_order: number }[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [uploading, setUploading] = useState(false);
+  const [message, setMessage] = useState('');
+
+  const loadPhotos = useCallback(async () => {
+    try {
+      const res = await adminList('about_photos');
+      setPhotos((res.data || []).sort((a: { sort_order: number }, b: { sort_order: number }) => a.sort_order - b.sort_order));
+    } catch {
+      setMessage('Failed to load photos');
+    }
+    setLoading(false);
+  }, []);
+
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { loadPhotos(); }, [loadPhotos]);
+
+  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    setMessage('');
+    try {
+      const url = await uploadImage(file, 'about');
+      await adminCreate('about_photos', {
+        image_url: url,
+        sort_order: photos.length,
+      });
+      setMessage('Photo uploaded!');
+      await loadPhotos();
+    } catch (err) {
+      setMessage(err instanceof Error ? err.message : 'Upload failed');
+    }
+    setUploading(false);
+    e.target.value = '';
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!confirm('Remove this photo?')) return;
+    try {
+      await adminDelete('about_photos', id);
+      setMessage('Photo removed');
+      await loadPhotos();
+    } catch (err) {
+      setMessage(err instanceof Error ? err.message : 'Failed to delete');
+    }
+  };
+
+  if (loading) return <p className="text-[#2D2424]/60 text-center py-8">Loading...</p>;
+
+  return (
+    <div>
+      {message && (
+        <div className="mb-4 p-3 bg-[#FFF5F7] text-[#2D2424] rounded-lg text-sm flex justify-between">
+          <span>{message}</span>
+          <button onClick={() => setMessage('')} className="text-[#F8A5B8] font-bold">×</button>
+        </div>
+      )}
+
+      <div className="mb-6">
+        <label className="block text-sm font-medium text-[#2D2424] mb-2">
+          Upload New Photo
+        </label>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleUpload}
+          disabled={uploading}
+          className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm file:mr-3 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-sm file:bg-[#F8A5B8]/10 file:text-[#F8A5B8] file:font-medium"
+        />
+        {uploading && <p className="mt-1 text-sm text-[#F8A5B8]">Uploading...</p>}
+      </div>
+
+      {photos.length === 0 ? (
+        <p className="text-[#2D2424]/60 text-center py-8">No photos yet. Upload your first one!</p>
+      ) : (
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+          {photos.map((photo) => (
+            <div key={photo.id} className="relative group rounded-xl overflow-hidden shadow-sm border border-gray-100">
+              <img
+                src={photo.image_url}
+                alt="About photo"
+                className="w-full aspect-[3/4] object-cover"
+              />
+              <button
+                onClick={() => handleDelete(photo.id)}
+                className="absolute top-2 right-2 bg-red-500 text-white w-7 h-7 rounded-full text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity"
+              >
+                ×
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ============================================================
 // Main Admin Page
 // ============================================================
 
@@ -563,6 +723,7 @@ export default function Admin() {
     { id: 'events', label: 'Events' },
     { id: 'vlogs', label: 'Vlogs' },
     { id: 'stats', label: 'Media Kit Stats' },
+    { id: 'photos', label: 'About Photos' },
     { id: 'batch', label: 'Batch Import' },
   ];
 
@@ -630,6 +791,7 @@ export default function Admin() {
           <ContentManager table="vlogs" fields={VLOG_FIELDS} nameField="title" />
         )}
         {activeTab === 'stats' && <StatsManager />}
+        {activeTab === 'photos' && <PhotosManager />}
         {activeTab === 'batch' && <BatchImport />}
       </div>
     </div>
