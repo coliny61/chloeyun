@@ -181,7 +181,7 @@ export default function MediaKit() {
                 }`}
                 style={{ transitionDelay: '150ms' }}
               >
-                Let's create something amazing together. Here's everything you need to know about partnering with Chloe Eats DFW.
+                27K+ followers. 2.8M+ views. A loyal DFW audience that shows up and eats. Here's everything you need to know about partnering with me.
               </p>
               <div
                 className={`mt-8 flex flex-wrap gap-4 justify-center lg:justify-start transition-all duration-700 ${

@@ -22,9 +22,9 @@ export default function About() {
                 <span className="block text-[#F8A5B8]">Chloe Yun</span>
               </h1>
               <p className="mt-6 text-lg text-[#2D2424]/80 leading-relaxed">
-                I'm a food content creator based in Dallas-Fort Worth, on a mission to discover and share
-                the most delicious spots with my amazing community. From hole-in-the-wall gems to
-                trendy new restaurants, I'm always on the hunt for my next great meal!
+                I'm a DFW food content creator with 27K+ TikTok followers and over 2.8 million views — on a
+                mission to put every incredible restaurant, hidden gem, and hole-in-the-wall on the map.
+                If it's worth eating in Dallas-Fort Worth, I've probably already filmed it.
               </p>
               <div className="mt-8 flex flex-wrap gap-4">
                 <a
@@ -70,19 +70,20 @@ export default function About() {
           <div className="mt-12 grid lg:grid-cols-2 gap-12 items-center">
             <div className="prose prose-lg max-w-none text-[#2D2424]/80">
               <p>
-                Growing up in a Korean-American household, food was always at the center of everything.
-                From helping my grandmother make kimchi to exploring the diverse food scene of DFW,
-                I've been obsessed with culinary experiences for as long as I can remember.
+                Growing up Korean-American in Dallas, food was the center of everything — Sunday
+                mornings making kimchi jjigae with my grandmother, after-school runs to H Mart,
+                and family dinners where trying something new was always the move.
               </p>
               <p className="mt-4">
-                What started as sharing food photos with friends on Instagram quickly grew into something
-                bigger. My honest reviews and genuine enthusiasm for discovering hidden gems resonated
-                with people, and before I knew it, I had built an incredible community of fellow foodies!
+                What started as posting food pics for friends turned into something way bigger. My
+                honest, no-filter reviews started resonating with people across DFW — and before I
+                knew it, I'd built a community of thousands who trust me to find their next favorite spot.
               </p>
               <p className="mt-4">
-                Now, I spend my days hunting down the best bites, creating content that makes you hungry,
-                and building this platform to make it easier for everyone to find amazing food. Whether
-                you're craving Korean BBQ, the perfect slice of pizza, or a cozy brunch spot, I've got you covered.
+                Now I spend my days hunting down the best eats from Carrollton to Deep Ellum, creating
+                TikTok and Instagram content that makes people hungry, and partnering with restaurants
+                who want real, authentic exposure to the DFW food community. KBBQ, tacos, brunch, late-night
+                bites — if you're craving it, I've got a recommendation.
               </p>
             </div>
             {/* Photo Gallery - All vertical images */}
@@ -134,32 +135,32 @@ export default function About() {
             {[
               {
                 title: 'Restaurant Reviews',
-                description: 'Honest, detailed reviews of the best spots in the city. I share the good, the great, and the must-try dishes.',
+                description: 'In-depth, honest reviews that drive real foot traffic. I highlight the dishes worth ordering and the vibes worth experiencing.',
                 icon: '🍽️',
               },
               {
                 title: 'TikTok Videos',
-                description: 'Quick, engaging videos showcasing the food, the vibes, and everything you need to know before you go.',
+                description: 'Short-form videos that rack up views and get people through your door. Engaging, authentic, and optimized for the algorithm.',
                 icon: '🎬',
               },
               {
                 title: 'Instagram Content',
-                description: 'Beautiful food photography and Stories taking you behind the scenes of my culinary adventures.',
+                description: 'Scroll-stopping food photography, Reels, and Stories that showcase your restaurant to an engaged, local audience.',
                 icon: '📸',
               },
               {
                 title: 'Food Guides',
-                description: 'Curated lists and guides like "Best Korean BBQ in NYC" or "Budget-Friendly Date Spots".',
+                description: 'Curated lists and guides like "Best Korean BBQ in DFW" or "Budget-Friendly Date Night Spots in Dallas".',
                 icon: '📍',
               },
               {
                 title: 'Brand Partnerships',
-                description: 'Authentic collaborations with restaurants and food brands that I genuinely love and believe in.',
+                description: 'Paid partnerships with restaurants and food brands I genuinely love. Real content, real results, real audience trust.',
                 icon: '🤝',
               },
               {
                 title: 'Community',
-                description: 'Building a community of food lovers who share recommendations and discover new favorites together.',
+                description: 'A loyal community of DFW food lovers who actively share recommendations, tag friends, and show up to eat.',
                 icon: '❤️',
               },
             ].map((item, index) => (
@@ -182,7 +183,7 @@ export default function About() {
             Let's Connect!
           </h2>
           <p className="mt-6 text-lg text-white/90 max-w-2xl mx-auto">
-            Interested in working together or just want to say hi? I'd love to hear from you!
+            Want authentic content that actually drives people to your restaurant? Let's make it happen.
           </p>
           <div className="mt-8 flex flex-wrap gap-4 justify-center">
             <Link to="/contact">

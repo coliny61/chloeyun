@@ -164,8 +164,8 @@ export default function Contact() {
             }`}
             style={{ transitionDelay: '150ms' }}
           >
-            Interested in partnering up? Have a restaurant you want me to try?
-            Or just want to say hello? I'd love to hear from you!
+            Whether you're a restaurant looking for real exposure, a brand wanting authentic UGC,
+            or you just know a spot I need to try — let's talk.
           </p>
         </div>
       </section>

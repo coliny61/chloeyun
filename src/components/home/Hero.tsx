@@ -94,8 +94,8 @@ export default function Hero() {
                 isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
               }`}
             >
-              Discover the Best
-              <span className="block gradient-text-animated">Food in DFW</span>
+              Your Next Favorite
+              <span className="block gradient-text-animated">DFW Food Spot</span>
             </h1>
 
             {/* Animated description */}
@@ -105,8 +105,8 @@ export default function Hero() {
               }`}
               style={{ transitionDelay: '200ms' }}
             >
-              Join me on a culinary adventure! I'm Chloe, your guide to the most
-              delicious hidden gems and must-try restaurants in the city.
+              I'm Chloe — a Dallas-Fort Worth food content creator helping you find the best
+              hidden gems, viral eats, and must-try restaurants across the Metroplex.
             </p>
 
             {/* Animated buttons */}

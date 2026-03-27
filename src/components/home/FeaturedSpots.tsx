@@ -42,7 +42,7 @@ export default function FeaturedSpots() {
             Featured Food Spots
           </h2>
           <p className="mt-4 text-lg text-[#2D2424]/70 max-w-2xl mx-auto">
-            My hand-picked favorites that you absolutely have to try. These are the places I keep coming back to!
+            The spots I keep coming back to — tried, tested, and worth the drive. These are my personal go-tos across DFW.
           </p>
         </div>
 

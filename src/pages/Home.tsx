@@ -93,12 +93,12 @@ export default function Home() {
                 Hi, I'm Chloe!
               </h2>
               <p className="mt-6 text-lg text-[#2D2424]/80 leading-relaxed">
-                Food has always been my love language. Whether it's discovering a hidden gem in Carrollton
-                or finding the best KBBQ in DFW, I'm on a mission to share the best spots with you.
+                I'm Chloe — a Korean-American food creator born and raised in Dallas. With 27K+ followers
+                and millions of views, I help people find the best eats across the Metroplex.
               </p>
               <p className="mt-4 text-lg text-[#2D2424]/80 leading-relaxed">
-                From budget-friendly bites to special occasion splurges, I've got recommendations for
-                every craving and occasion. Let's eat!
+                From hole-in-the-wall KBBQ to viral brunch spots, I've tried it all — and I only
+                share the places actually worth your time. Let's eat.
               </p>
               <div
                 className={`mt-8 transition-all duration-700 ${
@@ -155,8 +155,8 @@ export default function Home() {
             }`}
             style={{ transitionDelay: '150ms' }}
           >
-            Looking for authentic food content that resonates? I partner with restaurants and brands
-            that share my passion for great food and genuine experiences.
+            I partner with DFW restaurants and food brands to create content that actually gets people
+            through the door. Authentic reviews, engaging videos, and a loyal audience that trusts my recommendations.
           </p>
           <div
             className={`mt-8 transition-all duration-700 ${
