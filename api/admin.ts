@@ -69,10 +69,11 @@ export default async function handler(
       }
       case 'delete': {
         if (!id) { res.status(400).json({ error: 'id required' }); return; }
+        const deleteColumn = table === 'site_settings' ? 'key' : 'id';
         const { error } = await supabase
           .from(table)
           .delete()
-          .eq('id', id);
+          .eq(deleteColumn, id);
         if (error) throw error;
         res.status(200).json({ success: true });
         break;
