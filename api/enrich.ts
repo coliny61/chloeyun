@@ -90,8 +90,15 @@ export default async function handler(
                 updates.cover_image_url = imageUrl;
               }
             } catch (photoErr) {
-              console.error('Google photo upload failed:', photoErr);
-              updates._photo_error = `google: ${photoErr instanceof Error ? photoErr.message : String(photoErr)}`;
+              // Blob upload failed — use Google Places photo URL directly as fallback
+              console.error('Google photo upload failed, using direct URL:', photoErr);
+              const ref = details.photos[0].photo_reference;
+              const apiKey = process.env.GOOGLE_PLACES_API_KEY;
+              if (ref && apiKey) {
+                updates.cover_image_url = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=800&photo_reference=${ref}&key=${apiKey}`;
+              } else {
+                updates._photo_error = `google: blob upload failed, no fallback available`;
+              }
             }
           }
         }
@@ -121,10 +128,13 @@ export default async function handler(
                   const uploadedUrl = await uploadImage(imageBuffer, filename);
                   updates.cover_image_url = uploadedUrl;
                 } else {
-                  updates._photo_error = `yelp: download returned null for ${imageUrl}`;
+                  // Download worked but returned null — use source URL directly
+                  updates.cover_image_url = imageUrl;
                 }
               } catch (photoErr) {
-                updates._photo_error = `yelp: ${photoErr instanceof Error ? photoErr.message : String(photoErr)}`;
+                // Blob upload failed — use Yelp image URL directly as fallback
+                console.error('Yelp photo upload failed, using direct URL:', photoErr);
+                updates.cover_image_url = imageUrl;
               }
             } else {
               updates._photo_error = 'yelp: no image URL in business details';
