@@ -89,7 +89,10 @@ export default async function handler(
                 const imageUrl = await uploadImage(photoBuffer, filename);
                 updates.cover_image_url = imageUrl;
               }
-            } catch { /* photo upload failed, continue */ }
+            } catch (photoErr) {
+              console.error('Google photo upload failed:', photoErr);
+              updates._photo_error = `google: ${photoErr instanceof Error ? photoErr.message : String(photoErr)}`;
+            }
           }
         }
       }
@@ -117,8 +120,14 @@ export default async function handler(
                   const filename = generateFilename(place.name);
                   const uploadedUrl = await uploadImage(imageBuffer, filename);
                   updates.cover_image_url = uploadedUrl;
+                } else {
+                  updates._photo_error = `yelp: download returned null for ${imageUrl}`;
                 }
-              } catch { /* photo upload failed */ }
+              } catch (photoErr) {
+                updates._photo_error = `yelp: ${photoErr instanceof Error ? photoErr.message : String(photoErr)}`;
+              }
+            } else {
+              updates._photo_error = 'yelp: no image URL in business details';
             }
           }
         }
@@ -127,6 +136,21 @@ export default async function handler(
 
     if (Object.keys(updates).length === 0) {
       res.status(200).json({ success: false, message: 'No enrichment data found', placeId, source });
+      return;
+    }
+
+    // Only fill fields that are currently empty (don't overwrite manual edits)
+    // unless forceRefresh is true
+    if (!forceRefresh) {
+      for (const key of Object.keys(updates)) {
+        if (place[key] !== null && place[key] !== '' && place[key] !== undefined) {
+          delete updates[key];
+        }
+      }
+    }
+
+    if (Object.keys(updates).length === 0) {
+      res.status(200).json({ success: true, message: 'All fields already populated', placeId, source });
       return;
     }
 
@@ -141,11 +165,15 @@ export default async function handler(
       return;
     }
 
+    const photoError = updates._photo_error as string | undefined;
+    delete updates._photo_error;
+
     res.status(200).json({
       success: true,
       placeId,
       source,
       enrichedFields: Object.keys(updates),
+      ...(photoError && { photoError }),
     });
   } catch (error) {
     res.status(500).json({
