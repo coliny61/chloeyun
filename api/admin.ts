@@ -34,10 +34,11 @@ export default async function handler(
   try {
     switch (action) {
       case 'list': {
+        const orderCol = table === 'site_settings' ? 'updated_at' : 'created_at';
         const { data: rows, error } = await supabase
           .from(table)
           .select('*')
-          .order('created_at', { ascending: false });
+          .order(orderCol, { ascending: false });
         if (error) throw error;
         res.status(200).json({ data: rows });
         break;
