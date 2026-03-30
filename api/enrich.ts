@@ -154,6 +154,10 @@ export default async function handler(
       return;
     }
 
+    // Extract diagnostic before DB update
+    const photoError = updates._photo_error as string | undefined;
+    delete updates._photo_error;
+
     // Update place in Supabase
     const { error: updateErr } = await supabase
       .from('places')
@@ -164,9 +168,6 @@ export default async function handler(
       res.status(500).json({ error: 'Failed to update place', details: updateErr.message });
       return;
     }
-
-    const photoError = updates._photo_error as string | undefined;
-    delete updates._photo_error;
 
     res.status(200).json({
       success: true,
