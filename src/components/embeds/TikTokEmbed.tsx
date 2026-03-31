@@ -81,6 +81,33 @@ async function fetchOEmbedData(url: string): Promise<OEmbedData | null> {
   return null;
 }
 
+function isVideoUrl(url: string): boolean {
+  return /\/video\/\d+/.test(url);
+}
+
+function FallbackCard({ url }: { url: string }) {
+  return (
+    <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-[#FFF5F7] to-[#FFE4E9] aspect-[9/16] min-h-[400px] max-h-[500px]">
+      <div className="absolute inset-0 flex flex-col items-center justify-center p-6">
+        <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg mb-4">
+          <svg className="w-8 h-8 text-[#F8A5B8]" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-5.2 1.74 2.89 2.89 0 012.31-4.64 2.93 2.93 0 01.88.13V9.4a6.84 6.84 0 00-1-.05A6.33 6.33 0 005 20.1a6.34 6.34 0 0010.86-4.43v-7a8.16 8.16 0 004.77 1.52v-3.4a4.85 4.85 0 01-1-.1z"/>
+          </svg>
+        </div>
+        <p className="text-[#2D2424]/70 text-sm mb-4 text-center">Watch on TikTok</p>
+        <a
+          href={url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="px-6 py-3 bg-[#F8A5B8] text-white rounded-full font-medium hover:bg-[#E8919F] transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5"
+        >
+          Open TikTok
+        </a>
+      </div>
+    </div>
+  );
+}
+
 export default function TikTokEmbed({ url }: TikTokEmbedProps) {
   const [loading, setLoading] = useState(true);
   const [embedData, setEmbedData] = useState<OEmbedData | null>(null);
@@ -90,6 +117,9 @@ export default function TikTokEmbed({ url }: TikTokEmbedProps) {
   const [isVisible, setIsVisible] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const sentinelRef = useRef<HTMLDivElement>(null);
+
+  // Skip oEmbed entirely for profile-only URLs
+  const isVideo = isVideoUrl(url);
 
   // Lazy loading: only fetch oEmbed when scrolled into view
   useEffect(() => {
@@ -109,9 +139,16 @@ export default function TikTokEmbed({ url }: TikTokEmbedProps) {
     return () => observer.disconnect();
   }, [url]);
 
-  // Fetch oEmbed data only when visible
+  // Fetch oEmbed data only when visible AND it's a video URL
   useEffect(() => {
     if (!isVisible || !url) return;
+
+    // Profile-only URLs — go straight to fallback, no fetch
+    if (!isVideo) {
+      setLoading(false);
+      setError(true);
+      return;
+    }
 
     const fetchData = async () => {
       const data = await fetchOEmbedData(url);
@@ -124,7 +161,7 @@ export default function TikTokEmbed({ url }: TikTokEmbedProps) {
     };
 
     fetchData();
-  }, [url, isVisible]);
+  }, [url, isVisible, isVideo]);
 
   // Load and render TikTok embed when user clicks play (inline)
   useEffect(() => {
@@ -144,6 +181,11 @@ export default function TikTokEmbed({ url }: TikTokEmbedProps) {
 
   if (!url) return null;
 
+  // Profile-only URLs — render fallback immediately (no placeholder/spinner)
+  if (!isVideo && isVisible) {
+    return <FallbackCard url={url} />;
+  }
+
   // Placeholder before lazy load triggers
   if (!isVisible) {
     return (
@@ -156,7 +198,7 @@ export default function TikTokEmbed({ url }: TikTokEmbedProps) {
     );
   }
 
-  // Loading state
+  // Loading state (only for video URLs)
   if (loading) {
     return (
       <div ref={sentinelRef} className="relative overflow-hidden rounded-xl aspect-[9/16] min-h-[400px] max-h-[500px] animate-shimmer">
@@ -172,26 +214,7 @@ export default function TikTokEmbed({ url }: TikTokEmbedProps) {
 
   // Error state — fallback link to TikTok
   if (error || !embedData) {
-    return (
-      <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-[#FFF5F7] to-[#FFE4E9] aspect-[9/16] min-h-[400px] max-h-[500px]">
-        <div className="absolute inset-0 flex flex-col items-center justify-center p-6">
-          <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg mb-4">
-            <svg className="w-8 h-8 text-[#F8A5B8]" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-5.2 1.74 2.89 2.89 0 012.31-4.64 2.93 2.93 0 01.88.13V9.4a6.84 6.84 0 00-1-.05A6.33 6.33 0 005 20.1a6.34 6.34 0 0010.86-4.43v-7a8.16 8.16 0 004.77 1.52v-3.4a4.85 4.85 0 01-1-.1z"/>
-            </svg>
-          </div>
-          <p className="text-[#2D2424]/70 text-sm mb-4 text-center">Watch on TikTok</p>
-          <a
-            href={url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="px-6 py-3 bg-[#F8A5B8] text-white rounded-full font-medium hover:bg-[#E8919F] transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5"
-          >
-            Open TikTok
-          </a>
-        </div>
-      </div>
-    );
+    return <FallbackCard url={url} />;
   }
 
   // Playing state — show inline TikTok embed
