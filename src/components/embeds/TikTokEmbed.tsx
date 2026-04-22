@@ -114,34 +114,14 @@ export default function TikTokEmbed({ url }: TikTokEmbedProps) {
   const [error, setError] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [embedReady, setEmbedReady] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
-  const sentinelRef = useRef<HTMLDivElement>(null);
 
   // Skip oEmbed entirely for profile-only URLs
   const isVideo = isVideoUrl(url);
 
-  // Lazy loading: only fetch oEmbed when scrolled into view
+  // Fetch oEmbed data immediately for video URLs; skip for profile URLs
   useEffect(() => {
-    if (!url || !sentinelRef.current) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.disconnect();
-        }
-      },
-      { rootMargin: '200px' }
-    );
-
-    observer.observe(sentinelRef.current);
-    return () => observer.disconnect();
-  }, [url]);
-
-  // Fetch oEmbed data only when visible AND it's a video URL
-  useEffect(() => {
-    if (!isVisible || !url) return;
+    if (!url) return;
 
     // Profile-only URLs — go straight to fallback, no fetch
     if (!isVideo) {
@@ -161,7 +141,7 @@ export default function TikTokEmbed({ url }: TikTokEmbedProps) {
     };
 
     fetchData();
-  }, [url, isVisible, isVideo]);
+  }, [url, isVideo]);
 
   // Load and render TikTok embed when user clicks play (inline)
   useEffect(() => {
@@ -181,27 +161,15 @@ export default function TikTokEmbed({ url }: TikTokEmbedProps) {
 
   if (!url) return null;
 
-  // Profile-only URLs — render fallback immediately (no placeholder/spinner)
-  if (!isVideo && isVisible) {
+  // Profile-only URLs — render fallback immediately
+  if (!isVideo) {
     return <FallbackCard url={url} />;
-  }
-
-  // Placeholder before lazy load triggers
-  if (!isVisible) {
-    return (
-      <div
-        ref={sentinelRef}
-        className="relative overflow-hidden rounded-xl bg-[#FFF5F7] aspect-[9/16] min-h-[400px] max-h-[500px] flex items-center justify-center"
-      >
-        <div className="text-[#F8A5B8]/40 text-sm">Loading...</div>
-      </div>
-    );
   }
 
   // Loading state (only for video URLs)
   if (loading) {
     return (
-      <div ref={sentinelRef} className="relative overflow-hidden rounded-xl aspect-[9/16] min-h-[400px] max-h-[500px] animate-shimmer">
+      <div className="relative overflow-hidden rounded-xl aspect-[9/16] min-h-[400px] max-h-[500px] animate-shimmer">
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="flex flex-col items-center">
             <div className="w-12 h-12 border-3 border-[#F8A5B8] border-t-transparent rounded-full animate-spin mb-3" />

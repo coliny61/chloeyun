@@ -57,33 +57,13 @@ export default function InstagramEmbed({ url }: InstagramEmbedProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [embedFailed, setEmbedFailed] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
-  const sentinelRef = useRef<HTMLDivElement>(null);
 
   const postId = extractInstagramPostId(url);
 
-  // Lazy loading: only load embed when scrolled into view
+  // Load Instagram embed script immediately
   useEffect(() => {
-    if (!postId || !sentinelRef.current) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.disconnect();
-        }
-      },
-      { rootMargin: '200px' }
-    );
-
-    observer.observe(sentinelRef.current);
-    return () => observer.disconnect();
-  }, [postId]);
-
-  // Load Instagram embed script only when visible
-  useEffect(() => {
-    if (!isVisible || !postId) return;
+    if (!postId) return;
 
     const tryProcess = () => {
       setLoading(false);
@@ -106,11 +86,11 @@ export default function InstagramEmbed({ url }: InstagramEmbedProps) {
       };
       document.body.appendChild(script);
     }
-  }, [isVisible, postId]);
+  }, [postId]);
 
   // 5-second timeout: if embed.js hasn't processed the blockquote into an iframe, show fallback
   useEffect(() => {
-    if (loading || error || embedFailed || !isVisible || !postId) return;
+    if (loading || error || embedFailed || !postId) return;
 
     const timeout = setTimeout(() => {
       if (!containerRef.current) return;
@@ -121,7 +101,7 @@ export default function InstagramEmbed({ url }: InstagramEmbedProps) {
     }, 5000);
 
     return () => clearTimeout(timeout);
-  }, [loading, error, embedFailed, isVisible, postId]);
+  }, [loading, error, embedFailed, postId]);
 
   if (!postId) {
     return (
@@ -143,22 +123,10 @@ export default function InstagramEmbed({ url }: InstagramEmbedProps) {
     return <InstagramFallbackCard url={url} postId={postId} />;
   }
 
-  // Placeholder before lazy load
-  if (!isVisible) {
-    return (
-      <div
-        ref={sentinelRef}
-        className="bg-[#FFF5F7] rounded-xl min-h-[400px] flex items-center justify-center"
-      >
-        <div className="text-[#F8A5B8]/40 text-sm">Loading...</div>
-      </div>
-    );
-  }
-
   const embedUrl = url.includes('?') ? url.split('?')[0] : url;
 
   return (
-    <div className="relative" ref={sentinelRef}>
+    <div className="relative">
       {loading && (
         <div className="absolute inset-0 flex items-center justify-center bg-[#FFF5F7] rounded-xl min-h-[400px]">
           <div className="flex flex-col items-center">
